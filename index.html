@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O Editorial da Mentira - Sobrevivência</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="extras.css">
+</head>
+<body>
+
+    <!-- TELA INICIAL -->
+    <div id="start-screen" class="screen active">
+        <h1>📰 O EDITORIAL DA MENTIRA</h1>
+        <p>Sobreviva editando manchetes. O quão longe você vai por cliques?</p>
+        <button class="menu-btn" onclick="startGame()">NOVO JOGO</button>
+        <button class="menu-btn" id="btn-continue" style="display:none;" onclick="loadGame()">CONTINUAR</button>
+        <button class="menu-btn" onclick="showRules()">COMO JOGAR</button>
+        <div id="high-score-display" style="margin-top: 20px; color: var(--green);">Recorde: Nenhum</div>
+    </div>
+
+    <!-- TELA DE JOGO -->
+    <div id="game-screen" class="screen">
+        
+        <div id="hud">
+            <div class="hud-item money-text">💰 <span id="hud-money">R$ 0</span></div>
+            <div class="hud-item">📅 Dia <span id="hud-day">1</span></div>
+            <div class="hud-item action-text">⚡ Ações: <span id="hud-actions">3/3</span></div>
+            <div class="hud-item followers-text">👥 <span id="hud-followers">0</span></div>
+            <div class="hud-item">⭐ Reputação: <span id="hud-rep">Alta</span></div>
+            
+            <div class="police-container" id="police-container">
+                <div class="hud-item">🚨 Atenção Policial: <span id="hud-police-val">0%</span></div>
+                <div class="police-bar-bg">
+                    <div class="police-bar-fill" id="police-bar"></div>
+                </div>
+                <div class="police-status" id="police-status">Tudo tranquilo</div>
+            </div>
+        </div>
+
+        <div id="game-content">
+            
+            <!-- COLUNA ESQUERDA -->
+            <div class="left-panel">
+                <div class="house-card">
+                    <div class="house-img" id="house-image"><div id="viatura">🚓</div></div>
+                    <h3 id="house-name">Barraco</h3>
+                    <button class="btn-upgrade" id="btn-upgrade-house" onclick="upgradeHouse()">Melhorar Casa</button>
+                    <div class="house-prog"><div id="house-prog-fill"></div></div><div id="house-prog-txt"></div>
+                </div>
+
+                <div class="cop-card"><div class="cop-face" id="cop-face">🕵️</div><div><b>Delegado Amaral</b><div id="cop-clues">⚪⚪⚪</div><div id="cop-quote"></div></div></div>
+
+                <div class="bills-card">
+                    <h3>Contas Ativas</h3>
+                    <div id="bills-list">
+                        <!-- Preenchido via JS -->
+                    </div>
+                </div>
+
+                <button class="btn-action btn-lay-low" onclick="actionLayLow()">🫥 Ficar na Miúda (-1 Ação)</button>
+                <button class="btn-action btn-end-day" onclick="endDay()">🌙 Encerrar Dia</button>
+            </div>
+
+            <!-- COLUNA CENTRAL -->
+            <div class="center-panel">
+                <div class="newspaper" id="newspaper-bg" ondragover="event.preventDefault()" ondrop="dropSticker(event)">
+                    <div class="combo-alert" id="combo-alert">💥 COMBO: ABSURDO!</div>
+                    <div class="paper-meta"><span id="paper-ed">Edição nº 1</span><span>R$ 2,00</span></div>
+                    <div class="newspaper-header">GAZETA DA MANHÃ</div>
+                    <div class="headline" id="headline-text">Carregando notícia...</div>
+                    <div class="paper-body"><div class="photo" id="news-photo">📰</div><div class="cols"></div></div>
+                    <div id="stamps"></div>
+                </div>
+
+                <div class="slots" id="slots"></div>
+                <div id="narrator">🎙️ <span id="narr-txt"></span></div>
+
+                <div class="editor-stats">
+                    <div>Lucro Base Est.: <span style="color:var(--green)">R$ <span id="est-profit">0</span></span></div>
+                    <div>Risco Adicionado: <span style="color:var(--red)">+<span id="est-risk">0</span>%</span></div>
+                    <div>Potencial Viral: <span style="color:var(--yellow)"><span id="est-viral">Baixo</span></span></div>
+                </div>
+
+                <button class="btn-publish" id="btn-publish" onclick="startBet()">🖨️ PUBLICAR MANCHETE (-1 Ação)</button>
+                <button class="btn-cancel" id="btn-cancel" onclick="cancelHeadline()">❌ CANCELAR MANCHETE</button>
+
+                <div class="viral-feed">
+                    <h3 style="color: var(--pink); border-bottom: 1px solid #444; padding-bottom:5px; margin-bottom:10px;">🔥 Publicações Ativas</h3>
+                    <div id="viral-list">
+                        <div style="color: #666; font-style: italic;">Nenhuma publicação viralizando no momento.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COLUNA DIREITA -->
+            <div class="right-panel">
+                <div class="sticker-panel">
+                    <h3>Adesivos de Edição</h3>
+                    <div style="font-size:.75rem;color:#aab;margin-bottom:8px">Arraste para o jornal (ou clique). Clique no carimbo para descolar.</div>
+                    <div id="stickers-container">
+                        <!-- Preenchido via JS -->
+                    </div>
+                    <button class="btn-action" style="width: 100%; margin-top: 10px;" onclick="generateBaseNews()">🎲 Sortear Manchete</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- MODAL DE EVENTO -->
+    <div id="event-modal" class="modal-overlay">
+        <div class="modal-box">
+            <h2 class="modal-title" id="event-title">Evento!</h2>
+            <p class="modal-text" id="event-desc">Descrição do evento...</p>
+            <div class="modal-choices" id="event-choices">
+                <!-- Botões via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL INFORMAÇÃO SIMPLES (Regras, Game Over stats) -->
+    <div id="info-modal" class="modal-overlay">
+        <div class="modal-box">
+            <h2 class="modal-title" id="info-title">Aviso</h2>
+            <p class="modal-text" id="info-desc">Texto</p>
+            <button class="modal-btn" onclick="closeInfoModal()" id="info-btn">OK</button>
+        </div>
+    </div>
+
+    <!-- APOSTA DE PUBLICAÇÃO -->
+    <div id="bet-overlay" class="ov"><div class="ov-box"><h2>🖨️ SEGURE A TENSÃO!</h2><p>Quanto mais espera, mais rende e mais arrisca. Se estourar, a edição sai tosca.</p><div id="bet-mult">x1.00</div><div class="bar-bg"><div id="bet-fill"></div></div><button class="ov-btn" onclick="releaseBet(false)">SOLTAR! (Espaço)</button></div></div>
+
+    <!-- AO VIVO -->
+    <div id="live-overlay" class="ov" onclick="closeLive()"><div class="ov-box"><div class="live-tag">● AO VIVO</div><p id="live-head" style="font-style:italic;margin:8px 0"></p><div id="live-views">0</div><div>visualizações</div><div style="color:var(--green);font-weight:900;margin-top:6px" id="live-money"></div><div id="live-cm"></div></div></div>
+
+    <!-- CENA DE PRISÃO -->
+    <div id="prison-screen">
+        <div id="prison-text"></div>
+        <div id="prison-choices">
+            <button class="prison-btn" onclick="resolvePrison('sim')">SIM</button>
+            <button class="prison-btn" onclick="resolvePrison('nao')">NÃO</button>
+        </div>
+    </div>
+
+<script src="script.js"></script>
+<script src="extras.js"></script>
+</body>
+</html>
