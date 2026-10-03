@@ -591,11 +591,12 @@ function endDay() {
 function renderBills() {
     let cont = document.getElementById('bills-list');
     cont.innerHTML = "";
-    state.bills.forEach(b => {
+    const postitStyles = ['pin', 'clip', 'curl'];
+    state.bills.forEach((b, i) => {
         let div = document.createElement('div');
-        div.className = 'bill-item';
+        div.className = 'bill-item postit postit-' + postitStyles[i % 3] + (b.strikes > 0 ? ' late' : '');
         let status = b.strikes > 0 ? `<span class="bill-warning">ATRASADA! (${b.strikes})</span>` : `Vence em: ${b.daysLeft}d`;
-        div.innerHTML = `<span>${b.name} (R$ ${b.cost})</span> <span>${status}</span>`;
+        div.innerHTML = `<span class="bill-name">${b.name}</span><span class="bill-cost">R$ ${b.cost}</span><span class="bill-due">${status}</span>`;
         cont.appendChild(div);
     });
 }

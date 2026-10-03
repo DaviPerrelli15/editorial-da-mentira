@@ -1,0 +1,95 @@
+/* ===== VINTAGE: moldura polaroid + post-its ===== */
+:root{ --hand:'Caveat','Segoe Print','Bradley Hand','Comic Sans MS',cursive; }
+
+/* ---------- POLAROID (cartão da casa) ---------- */
+.house-card.polaroid{
+  position:relative; background:linear-gradient(#fbfaf5,#efece1);
+  padding:14px 14px 16px; border-radius:3px; color:#2b2620;
+  transform:rotate(-1.5deg); margin-top:14px;
+  box-shadow:0 10px 22px rgba(0,0,0,.55), 0 2px 4px rgba(0,0,0,.4), inset 0 0 0 1px rgba(0,0,0,.05);
+}
+.polaroid .tape{
+  position:absolute; top:-14px; left:50%; width:96px; height:28px;
+  transform:translateX(-50%) rotate(-2deg); z-index:3;
+  background:linear-gradient(180deg,rgba(230,210,160,.92),rgba(214,191,135,.88));
+  box-shadow:0 1px 3px rgba(0,0,0,.35);
+  clip-path:polygon(2% 0,98% 0,100% 12%,97% 28%,100% 45%,97% 62%,100% 80%,98% 100%,2% 100%,0 85%,3% 68%,0 50%,3% 32%,0 14%);
+}
+.polaroid .house-img{
+  height:190px; border:none; border-radius:0; margin-bottom:0;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.35), inset 0 0 28px rgba(60,40,10,.45);
+}
+.polaroid h3#house-name{
+  font:700 1.7rem/1 var(--hand); color:#1d1a16; padding:12px 0 2px; letter-spacing:.3px;
+}
+.polaroid .btn-upgrade{
+  background:none; border:none; box-shadow:none; color:#4a4238;
+  font:500 1.2rem var(--hand); padding:2px 0; margin-top:0; width:100%;
+}
+.polaroid .btn-upgrade:disabled{ background:none; color:#5a5145; cursor:default; }
+.polaroid .btn-upgrade.can-up{
+  color:#1e6b1e; font-weight:700; cursor:pointer; text-decoration:underline wavy #2e9b2e;
+  text-underline-offset:4px; animation:none;
+}
+.polaroid .btn-upgrade.can-up:hover{ color:#0f4d0f; }
+.polaroid .house-prog{ background:#d8d2c1; height:7px; border-radius:2px; box-shadow:inset 0 1px 2px rgba(0,0,0,.25); margin-top:8px; }
+.polaroid #house-prog-fill{ background:#5b7f4a; }
+.polaroid #house-prog-txt{ color:#5a5145; font:500 1rem/1.1 var(--hand); opacity:1; margin-top:5px; }
+
+/* ---------- POST-ITS (contas) ---------- */
+.bills-card{ background:transparent; padding:6px 4px; box-shadow:none; }
+.bills-card h3{
+  font:700 1.7rem var(--hand); color:var(--yellow); border-bottom:1px dashed #6a6a78;
+  margin:0 6px 14px; padding-bottom:4px; transform:rotate(-1deg);
+}
+#bills-list{ display:flex; flex-direction:column; gap:16px; padding:6px 6px 4px; }
+
+.postit{
+  position:relative; display:grid; grid-template-columns:1fr auto; align-items:baseline; gap:2px 8px;
+  padding:16px 14px 12px; min-height:78px; color:#3a3320; font-family:var(--hand);
+  background:linear-gradient(160deg,#fbf3a4 0%,#f3e883 60%,#ecdd6e 100%);
+  box-shadow:0 6px 10px -2px rgba(0,0,0,.55), inset 0 -12px 18px -12px rgba(120,100,20,.35);
+  transition:transform .2s;
+}
+.postit:hover{ transform:rotate(0deg) scale(1.03) !important; z-index:4; }
+.postit .bill-name{ font-weight:700; font-size:1.3rem; line-height:1; }
+.postit .bill-cost{ font-weight:700; font-size:1.3rem; color:#7a2e1b; }
+.postit .bill-due{ grid-column:1 / -1; font-size:1.15rem; font-weight:500; color:#5a5030; }
+.postit .bill-warning{ color:#c4160f; font-weight:700; font-size:1.2rem; text-decoration:underline wavy #c4160f; text-underline-offset:3px; }
+.postit.late{ background:linear-gradient(160deg,#ffd9a8,#ffc27a 60%,#f5ab5c); }
+
+/* variação 1: tachinha + canto dobrado */
+.postit-pin{ transform:rotate(-2.5deg); }
+.postit-pin::after{ /* dobra do canto superior direito */
+  content:''; position:absolute; top:0; right:0; width:26px; height:26px;
+  background:linear-gradient(225deg,#2a2a35 0 50%,#cbb94a 50% 100%);
+  box-shadow:-2px 2px 3px rgba(0,0,0,.25);
+}
+.postit-pin::before{ /* tachinha */
+  content:''; position:absolute; top:-8px; left:22px; width:16px; height:16px; border-radius:50%; z-index:2;
+  background:radial-gradient(circle at 35% 30%,#ff8a8a,#d4141c 55%,#7d0a10);
+  box-shadow:3px 5px 4px rgba(0,0,0,.45);
+}
+/* variação 2: clipe de papel */
+.postit-clip{ transform:rotate(1.8deg); }
+.postit-clip::before{
+  content:''; position:absolute; top:-14px; left:50%; width:20px; height:46px; margin-left:-10px; z-index:2;
+  background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 46' fill='none' stroke='%23b9bcc4' stroke-width='2.2' stroke-linecap='round'><path d='M6 38V9a4 4 0 0 1 8 0v28a6 6 0 0 1-12 0V12'/></svg>") center/contain no-repeat;
+  filter:drop-shadow(1px 2px 1px rgba(0,0,0,.45));
+}
+/* variação 3: canto inferior enrolado */
+.postit-curl{ transform:rotate(-1deg); }
+.postit-curl::after{
+  content:''; position:absolute; right:0; bottom:0; width:30px; height:30px;
+  background:linear-gradient(315deg,#2a2a35 0 45%,#d8c95a 45% 60%,#f7eea0 100%);
+  box-shadow:-3px -3px 5px rgba(0,0,0,.25); border-top-left-radius:100% ;
+}
+
+@media(prefers-reduced-motion:reduce){ .postit{ transition:none } }
+
+/* ajustes: prendedores não cobrem o texto */
+.postit-pin{ padding-top:20px; padding-right:34px; }
+.postit-clip{ padding-top:28px; }
+.postit-curl{ padding-bottom:20px; }
+.postit-clip::before{ left:auto; right:26px; margin-left:0; top:-16px; }
+.postit-clip .bill-cost{ margin-right:30px; }
