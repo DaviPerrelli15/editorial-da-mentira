@@ -79,7 +79,7 @@ updateEditor = function () {
     _ue();
     renderStamps();
     byId('news-photo').innerHTML = `${QUEM[slot[0]][1]}${COISA[slot[2]][1]}<span>FOTO: ARQUIVO</span>`;
-    byId('paper-ed').innerText = 'Edição nº ' + state.day;
+    byId('paper-ed').innerText = 'Edição nº ' + weekOf(state.day);
     const c = byId('combo-alert').style.display === 'block';
     if (c && !lastCombo) { shake(); soundCombo(); }
     lastCombo = c;
@@ -166,8 +166,8 @@ changePolice = function (a) {
     }
     updateCop();
 };
-const _ed = endDay;
-endDay = function () { _ed(); if (state.police < 25 && (state.clues || 0) > 0) { state.clues--; updateCop(); } };
+const _ed = endWeek;
+endWeek = function () { _ed(); if (state.police < 25 && (state.clues || 0) > 0) { state.clues--; updateCop(); } };
 
 /* ---------- Tensão visual e casa ---------- */
 const _uh = updateHUD;
