@@ -73,12 +73,13 @@ function renderStamps() {
         box.appendChild(d);
     });
 }
+const NEWS_PHOTO = `<img class="photo-img" src="img/ui/foto-rua.jpg" alt="">`;
 let lastCombo = false;
 const _ue = updateEditor;
 updateEditor = function () {
     _ue();
     renderStamps();
-    byId('news-photo').innerHTML = `${QUEM[slot[0]][1]}${COISA[slot[2]][1]}<span>FOTO: ARQUIVO</span>`;
+    byId('news-photo').innerHTML = NEWS_PHOTO + `<i class="ph-emoji">${QUEM[slot[0]][1]}${COISA[slot[2]][1]}</i><span>FOTO: ARQUIVO</span>`;
     byId('paper-ed').innerText = 'Edição nº ' + weekOf(state.day);
     const c = byId('combo-alert').style.display === 'block';
     if (c && !lastCombo) { shake(); soundCombo(); }
@@ -184,3 +185,5 @@ const _sg = startGame;
 startGame = function () { _sg(); state.clues = 0; updateCop(); narrate('Bem-vindo à Gazeta da Manhã. A verdade está de folga.'); };
 const _lg = loadGame;
 loadGame = function () { _lg(); updateCop(); narrate('De volta ao trabalho. A polícia também.'); };
+
+applyIcons();

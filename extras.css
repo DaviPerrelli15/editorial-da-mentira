@@ -1,3 +1,140 @@
+/* ===== EXTRAS.CSS AUTOSSUFICIENTE =====
+   Contém: style.css + extras (base) + vintage.css + layout novo.
+   Assim o visual carrega mesmo se style.css/vintage.css não forem achados. */
+
+/* ---------- (1) style.css ---------- */
+        /* ================= ESTÉTICA GERAL ================= */
+        :root {
+            --bg-color: #1a1a24;
+            --panel-bg: #2a2a35;
+            --pink: #ff66b2;
+            --purple: #9b59b6;
+            --green: #4dff4d;
+            --yellow: #ffff66;
+            --red: #ff3333;
+            --paper: #f4ebd0;
+            --text-light: #e0e0e0;
+            --text-dark: #222;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-light); overflow-x: hidden; }
+
+        /* ================= TELAS ================= */
+        .screen { display: none; min-height: 100vh; padding: 20px; flex-direction: column; align-items: center; }
+        .screen.active { display: flex; }
+
+        /* ================= TELA INICIAL ================= */
+        #start-screen { justify-content: center; text-align: center; }
+        #start-screen h1 { font-size: 3rem; color: var(--pink); margin-bottom: 10px; text-shadow: 2px 2px 0px var(--purple); }
+        #start-screen p { margin-bottom: 30px; font-size: 1.2rem; }
+        .menu-btn { background: var(--panel-bg); color: var(--text-light); border: 2px solid var(--pink); padding: 15px 30px; font-size: 1.2rem; margin: 10px; cursor: pointer; border-radius: 8px; transition: 0.2s; width: 250px; font-weight: bold; }
+        .menu-btn:hover { background: var(--pink); color: #fff; transform: scale(1.05); }
+
+        /* ================= HUD SUPERIOR ================= */
+        #hud { display: flex; justify-content: space-between; background: var(--panel-bg); padding: 15px; border-radius: 10px; width: 100%; max-width: 1200px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); flex-wrap: wrap; gap: 10px; }
+        .hud-item { font-weight: bold; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
+        .money-text { color: var(--green); }
+        .action-text { color: var(--yellow); }
+        .followers-text { color: #00e5ff; }
+        
+        .police-container { display: flex; flex-direction: column; width: 250px; }
+        .police-bar-bg { background: #444; height: 15px; border-radius: 10px; overflow: hidden; margin-top: 5px; position: relative; }
+        .police-bar-fill { height: 100%; width: 0%; transition: width 0.3s, background-color 0.3s; background-color: var(--green); }
+        .police-status { font-size: 0.8rem; margin-top: 2px; text-align: right; font-weight: bold; }
+
+        /* Animação Tensão Alta */
+        @keyframes blinkRed { 0% { box-shadow: 0 0 10px red; } 50% { box-shadow: 0 0 30px red; } 100% { box-shadow: 0 0 10px red; } }
+        .critical-danger { animation: blinkRed 1s infinite; border: 1px solid red; }
+
+        /* ================= ÁREA PRINCIPAL ================= */
+        #game-content { display: grid; grid-template-columns: 250px 1fr 300px; gap: 20px; width: 100%; max-width: 1200px; }
+
+        /* COLUNA ESQUERDA: CASA E CONTAS */
+        .left-panel { display: flex; flex-direction: column; gap: 15px; }
+        .house-card { background: var(--panel-bg); border-radius: 10px; padding: 10px; text-align: center; }
+        .house-img { width: 100%; height: 190px; background-position: center 45%; transition: filter .6s; background-color: #555; background-size: cover; background-position: center; border-radius: 8px; border: 2px solid var(--purple); margin-bottom: 10px; }
+        .btn-upgrade { background: var(--purple); color: white; border: none; padding: 8px; width: 100%; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 5px;}
+        .btn-upgrade:disabled { background: #555; cursor: not-allowed; }
+        
+        .bills-card { background: var(--panel-bg); border-radius: 10px; padding: 15px; }
+        .bills-card h3 { color: var(--yellow); margin-bottom: 10px; border-bottom: 1px solid #444; padding-bottom: 5px; }
+        .bill-item { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 5px; }
+        .bill-warning { color: var(--red); font-weight: bold; }
+
+        .btn-action { background: #333; color: white; border: 1px solid var(--text-light); padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .btn-action:hover { background: #444; }
+        .btn-lay-low { border-color: #00e5ff; color: #00e5ff; }
+        .btn-end-day { background: var(--purple); border: none; }
+
+        /* COLUNA DO MEIO: JORNAL E EDITOR */
+        .center-panel { display: flex; flex-direction: column; gap: 15px; }
+        .newspaper { background: var(--paper); color: var(--text-dark); padding: 30px; border-radius: 5px; box-shadow: inset 0 0 20px rgba(0,0,0,0.1); text-align: center; min-height: 250px; display: flex; flex-direction: column; justify-content: center; position: relative; }
+        .newspaper-header { font-family: 'Times New Roman', serif; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; font-size: 1.5rem; font-weight: bold; letter-spacing: 2px; }
+        .headline { font-family: 'Times New Roman', serif; font-size: 2rem; color: #b30000; font-weight: bold; line-height: 1.2; }
+        .combo-alert { position: absolute; top: 10px; right: 10px; background: var(--yellow); color: #000; padding: 5px 10px; font-weight: bold; border-radius: 5px; transform: rotate(5deg); display: none; box-shadow: 2px 2px 0 #000; }
+        
+        .editor-stats { background: var(--panel-bg); padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; font-size: 0.9rem; border-left: 4px solid var(--pink); }
+        .btn-publish { background: var(--green); color: #000; font-size: 1.2rem; font-weight: bold; padding: 15px; border: none; border-radius: 8px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 0 #009900; }
+        .btn-publish:hover { transform: translateY(2px); box-shadow: 0 2px 0 #009900; }
+        .btn-publish:active { transform: translateY(4px); box-shadow: 0 0 0; }
+        
+        /* Feed de Notícias Antigas (Viralização) */
+        .viral-feed { background: var(--panel-bg); padding: 15px; border-radius: 8px; max-height: 200px; overflow-y: auto; font-size: 0.85rem; }
+        .viral-item { border-bottom: 1px solid #444; padding-bottom: 8px; margin-bottom: 8px; }
+        .viral-item:last-child { border: none; margin: 0; padding: 0; }
+        .viral-views { color: var(--pink); font-weight: bold; }
+
+        /* COLUNA DIREITA: ADESIVOS */
+        .right-panel { display: flex; flex-direction: column; gap: 10px; }
+        .sticker-panel { background: var(--panel-bg); padding: 15px; border-radius: 8px; height: 100%; overflow-y: auto; }
+        .sticker-panel h3 { margin-bottom: 10px; text-align: center; border-bottom: 1px solid #444; padding-bottom: 5px; }
+        .sticker-btn { background: #3a3a48; border: 1px solid #555; color: white; padding: 10px; border-radius: 8px; width: 100%; text-align: left; margin-bottom: 8px; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; gap: 4px; }
+        .sticker-btn:hover { background: #4a4a58; border-color: var(--pink); }
+        .sticker-btn.active { background: var(--pink); color: #000; font-weight: bold; border-color: #fff; }
+        .sticker-title { font-size: 1rem; }
+        .sticker-fx { font-size: 0.75rem; color: #d6d6e6; }
+        .active .sticker-fx { color: #333; }
+
+        /* ================= MODAIS ================= */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+        .modal-overlay.show { opacity: 1; pointer-events: auto; }
+        .modal-box { background: var(--panel-bg); padding: 30px; border-radius: 10px; max-width: 500px; width: 90%; text-align: center; border: 2px solid var(--purple); box-shadow: 0 10px 30px rgba(0,0,0,0.8); transform: translateY(-20px); transition: transform 0.3s; }
+        .modal-overlay.show .modal-box { transform: translateY(0); }
+        .modal-title { font-size: 1.5rem; color: var(--yellow); margin-bottom: 15px; }
+        .modal-text { font-size: 1.1rem; margin-bottom: 20px; line-height: 1.4; }
+        .modal-choices { display: flex; flex-direction: column; gap: 10px; }
+        .modal-btn { padding: 12px; background: #444; color: white; border: 1px solid #666; border-radius: 5px; cursor: pointer; font-size: 1rem; transition: 0.2s; }
+        .modal-btn:hover { background: var(--pink); color: black; font-weight: bold; }
+
+        /* ================= CENA DE PRISÃO ================= */
+        #prison-screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 2000; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        #prison-text { color: red; font-family: 'Courier New', Courier, monospace; font-size: 2rem; margin-bottom: 30px; min-height: 60px; text-shadow: 0 0 10px red; }
+        #prison-choices { display: none; gap: 20px; }
+        .prison-btn { background: transparent; border: 2px solid red; color: red; padding: 15px 40px; font-size: 1.5rem; cursor: pointer; font-family: 'Courier New', Courier, monospace; }
+        .prison-btn:hover { background: red; color: black; }
+
+        /* Responsividade Básica */
+        @media(max-width: 900px) {
+            #game-content { grid-template-columns: 1fr; }
+            .left-panel, .center-panel, .right-panel { width: 100%; }
+            #hud { flex-direction: column; align-items: flex-start; }
+        }
+    .flash { animation: hflash 1.2s; } @keyframes hflash { 0%{filter:brightness(4) saturate(0)} 100%{filter:none} }
+        .house-prog { height: 10px; background: #444; border-radius: 6px; overflow: hidden; margin-top: 8px; }
+        #house-prog-fill { height: 100%; width: 0; background: var(--green); transition: width .5s; }
+        #house-prog-txt { font-size: .8rem; margin-top: 4px; opacity: .85; }
+        .can-up { animation: pulseup 1s infinite; } @keyframes pulseup { 50% { box-shadow: 0 0 14px var(--green); } }
+        .float-txt { position: fixed; z-index: 1500; font-weight: 900; font-size: 1.6rem; color: var(--green); text-shadow: 0 2px 6px #000; pointer-events: none; animation: flt 1.4s ease-out forwards; }
+        @keyframes flt { to { transform: translateY(-70px); opacity: 0; } }
+
+.btn-cancel { background: #ff3333; color: #000; font-size: 1.1rem; font-weight: bold; padding: 15px; border: none; border-radius: 8px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 0 #a80000; }
+.btn-cancel:hover { transform: translateY(2px); box-shadow: 0 2px 0 #a80000; }
+.btn-cancel:active { transform: translateY(4px); box-shadow: 0 0 0; }
+.btn-cancel:disabled { opacity: .4; cursor: default; }
+
+
+/* ---------- (2) extras base ---------- */
 /* ===== EXTRAS v2: visual, tensão, apostas, ao vivo ===== */
 .newspaper{position:relative;overflow:hidden;transform:rotate(-.4deg);box-shadow:0 10px 24px #000a, inset 0 0 40px rgba(120,90,30,.25);background-image:radial-gradient(circle at 20% 10%,rgba(255,255,255,.35),transparent 40%),repeating-linear-gradient(0deg,rgba(0,0,0,.025) 0 2px,transparent 2px 4px)}
 .paper-meta{display:flex;justify-content:space-between;font:italic .72rem Georgia,serif;color:#5a5240;border-bottom:1px solid #8a806a;padding-bottom:4px;margin-bottom:8px}
@@ -32,3 +169,282 @@ body.tension-3::after{animation:edge 1s infinite}@keyframes edge{0%{box-shadow:i
 #live-cm{text-align:left;font-size:.85rem;min-height:110px;margin-top:10px}#live-cm div{background:#33334a;padding:6px 10px;border-radius:14px;margin-top:6px;animation:stampin .3s}
 .live-tag{color:#ff3b3b;font-weight:900;animation:rb 1s infinite}
 @media(prefers-reduced-motion:reduce){*{animation:none!important}}
+
+
+
+/* ---------- (3) vintage.css ---------- */
+/* ===== VINTAGE: moldura polaroid + post-its ===== */
+:root{ --hand:'Caveat','Segoe Print','Bradley Hand','Comic Sans MS',cursive; }
+
+/* ---------- POLAROID (cartão da casa) ---------- */
+.house-card.polaroid{
+  position:relative; background:linear-gradient(#fbfaf5,#efece1);
+  padding:14px 14px 16px; border-radius:3px; color:#2b2620;
+  transform:rotate(-1.5deg); margin-top:14px;
+  box-shadow:0 10px 22px rgba(0,0,0,.55), 0 2px 4px rgba(0,0,0,.4), inset 0 0 0 1px rgba(0,0,0,.05);
+}
+.polaroid .tape{
+  position:absolute; top:-14px; left:50%; width:96px; height:28px;
+  transform:translateX(-50%) rotate(-2deg); z-index:3;
+  background:linear-gradient(180deg,rgba(230,210,160,.92),rgba(214,191,135,.88));
+  box-shadow:0 1px 3px rgba(0,0,0,.35);
+  clip-path:polygon(2% 0,98% 0,100% 12%,97% 28%,100% 45%,97% 62%,100% 80%,98% 100%,2% 100%,0 85%,3% 68%,0 50%,3% 32%,0 14%);
+}
+.polaroid .house-img{
+  height:190px; border:none; border-radius:0; margin-bottom:0;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.35), inset 0 0 28px rgba(60,40,10,.45);
+}
+.polaroid h3#house-name{
+  font:700 1.7rem/1 var(--hand); color:#1d1a16; padding:12px 0 2px; letter-spacing:.3px;
+}
+.polaroid .btn-upgrade{
+  background:none; border:none; box-shadow:none; color:#4a4238;
+  font:500 1.2rem var(--hand); padding:2px 0; margin-top:0; width:100%;
+}
+.polaroid .btn-upgrade:disabled{ background:none; color:#5a5145; cursor:default; }
+.polaroid .btn-upgrade.can-up{
+  color:#1e6b1e; font-weight:700; cursor:pointer; text-decoration:underline wavy #2e9b2e;
+  text-underline-offset:4px; animation:none;
+}
+.polaroid .btn-upgrade.can-up:hover{ color:#0f4d0f; }
+.polaroid .house-prog{ background:#d8d2c1; height:7px; border-radius:2px; box-shadow:inset 0 1px 2px rgba(0,0,0,.25); margin-top:8px; }
+.polaroid #house-prog-fill{ background:#5b7f4a; }
+.polaroid #house-prog-txt{ color:#5a5145; font:500 1rem/1.1 var(--hand); opacity:1; margin-top:5px; }
+
+/* ---------- POST-ITS (contas) ---------- */
+.bills-card{ background:transparent; padding:6px 4px; box-shadow:none; }
+.bills-card h3{
+  font:700 1.7rem var(--hand); color:var(--yellow); border-bottom:1px dashed #6a6a78;
+  margin:0 6px 14px; padding-bottom:4px; transform:rotate(-1deg);
+}
+#bills-list{ display:flex; flex-direction:column; gap:16px; padding:6px 6px 4px; }
+
+.postit{
+  position:relative; display:grid; grid-template-columns:1fr auto; align-items:baseline; gap:2px 8px;
+  padding:16px 14px 12px; min-height:78px; color:#3a3320; font-family:var(--hand);
+  background:linear-gradient(160deg,#fbf3a4 0%,#f3e883 60%,#ecdd6e 100%);
+  box-shadow:0 6px 10px -2px rgba(0,0,0,.55), inset 0 -12px 18px -12px rgba(120,100,20,.35);
+  transition:transform .2s;
+}
+.postit:hover{ transform:rotate(0deg) scale(1.03) !important; z-index:4; }
+.postit .bill-name{ font-weight:700; font-size:1.3rem; line-height:1; }
+.postit .bill-cost{ font-weight:700; font-size:1.3rem; color:#7a2e1b; }
+.postit .bill-due{ grid-column:1 / -1; font-size:1.15rem; font-weight:500; color:#5a5030; }
+.postit .bill-warning{ color:#c4160f; font-weight:700; font-size:1.2rem; text-decoration:underline wavy #c4160f; text-underline-offset:3px; }
+.postit.late{ background:linear-gradient(160deg,#ffd9a8,#ffc27a 60%,#f5ab5c); }
+
+/* variação 1: tachinha + canto dobrado */
+.postit-pin{ transform:rotate(-2.5deg); }
+.postit-pin::after{ /* dobra do canto superior direito */
+  content:''; position:absolute; top:0; right:0; width:26px; height:26px;
+  background:linear-gradient(225deg,#2a2a35 0 50%,#cbb94a 50% 100%);
+  box-shadow:-2px 2px 3px rgba(0,0,0,.25);
+}
+.postit-pin::before{ /* tachinha */
+  content:''; position:absolute; top:-8px; left:22px; width:16px; height:16px; border-radius:50%; z-index:2;
+  background:radial-gradient(circle at 35% 30%,#ff8a8a,#d4141c 55%,#7d0a10);
+  box-shadow:3px 5px 4px rgba(0,0,0,.45);
+}
+/* variação 2: clipe de papel */
+.postit-clip{ transform:rotate(1.8deg); }
+.postit-clip::before{
+  content:''; position:absolute; top:-14px; left:50%; width:20px; height:46px; margin-left:-10px; z-index:2;
+  background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 46' fill='none' stroke='%23b9bcc4' stroke-width='2.2' stroke-linecap='round'><path d='M6 38V9a4 4 0 0 1 8 0v28a6 6 0 0 1-12 0V12'/></svg>") center/contain no-repeat;
+  filter:drop-shadow(1px 2px 1px rgba(0,0,0,.45));
+}
+/* variação 3: canto inferior enrolado */
+.postit-curl{ transform:rotate(-1deg); }
+.postit-curl::after{
+  content:''; position:absolute; right:0; bottom:0; width:30px; height:30px;
+  background:linear-gradient(315deg,#2a2a35 0 45%,#d8c95a 45% 60%,#f7eea0 100%);
+  box-shadow:-3px -3px 5px rgba(0,0,0,.25); border-top-left-radius:100% ;
+}
+
+@media(prefers-reduced-motion:reduce){ .postit{ transition:none } }
+
+/* ajustes: prendedores não cobrem o texto */
+.postit-pin{ padding-top:20px; padding-right:34px; }
+.postit-clip{ padding-top:28px; }
+.postit-curl{ padding-bottom:20px; }
+.postit-clip::before{ left:auto; right:26px; margin-left:0; top:-16px; }
+.postit-clip .bill-cost{ margin-right:30px; }
+
+
+/* ---------- (4) layout novo ---------- */
+/* ===== LAYOUT v4: HUD no centro (uma linha), 3 colunas com rolagem própria ===== */
+#game-screen{height:100vh;min-height:0;padding:14px;overflow:hidden}
+#game-content{flex:1;min-height:0;max-width:1500px;grid-template-columns:260px minmax(0,1fr) 300px;gap:18px}
+.left-panel,.center-panel,.right-panel{min-height:0;height:100%;overflow-y:auto;padding:4px 8px 4px 0;scrollbar-width:thin;scrollbar-color:#6c4a8c #1a1a24}
+.left-panel::-webkit-scrollbar,.center-panel::-webkit-scrollbar,.right-panel::-webkit-scrollbar{width:8px}
+.left-panel::-webkit-scrollbar-track,.center-panel::-webkit-scrollbar-track,.right-panel::-webkit-scrollbar-track{background:#1a1a24}
+.left-panel::-webkit-scrollbar-thumb,.center-panel::-webkit-scrollbar-thumb,.right-panel::-webkit-scrollbar-thumb{background:#6c4a8c;border-radius:6px}
+.left-panel>*,.center-panel>*,.right-panel>*{flex:none}
+.sticker-panel{height:auto;overflow:visible}
+.right-panel .btn-lay-low{width:100%;padding:14px}
+
+/* HUD: só acima do jornal, todos lado a lado */
+.center-panel #hud{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;width:100%;max-width:none;margin:0;padding:0;background:none;box-shadow:none;flex-wrap:nowrap}
+.center-panel #hud .hud-item{flex-wrap:wrap;justify-content:center;text-align:center;gap:2px 6px;font-size:.85rem;background:var(--panel-bg);border:1px solid #4a3a66;border-radius:10px;padding:10px 6px}
+.center-panel #hud .police-container{width:auto;background:var(--panel-bg);border:1px solid #4a3a66;border-radius:10px;padding:8px 6px;justify-content:center}
+.center-panel #hud .police-container .hud-item{background:none;border:0;padding:0;font-size:.85rem}
+.center-panel #hud .police-status{text-align:center;font-size:.7rem}
+
+/* Jornal maior */
+.center-panel .newspaper{min-height:440px;padding:30px 36px}
+.center-panel .newspaper-header{font-size:2rem}
+.center-panel .headline{font-size:2.3rem}
+
+/* Coluna esquerda mais cheia */
+.left-panel{gap:18px}
+.cop-card{padding:14px;gap:14px;font-size:.9rem}
+.cop-face{font-size:3rem}
+.cop-info b{font-size:1rem;color:#fff}
+#cop-clues{font-size:1.1rem;margin:4px 0}
+.left-panel .btn-end-day{margin-top:auto;padding:14px}
+
+@media(max-width:900px){
+  #game-screen{height:auto;overflow:visible}
+  .left-panel,.center-panel,.right-panel{height:auto;overflow:visible;padding-right:0}
+  .center-panel #hud{grid-template-columns:repeat(2,1fr)}
+  .center-panel .newspaper{min-height:0;padding:20px}.center-panel .headline{font-size:1.6rem}
+}
+
+/* Correção: o ".active" da tela escurecia as linhas de efeito dos adesivos */
+.sticker-btn .sticker-fx{color:#d6d6e6}
+.sticker-btn.active .sticker-fx{color:#333}
+.sticker-btn{border-radius:10px}
+.sticker-btn.active{box-shadow:0 0 0 2px #fff}
+
+/* Upgrades */
+.upgrades-panel{background:var(--panel-bg);border:1px solid #4a3a66;border-radius:10px;padding:12px}
+.upgrades-panel h3{color:var(--yellow);font-size:.95rem;letter-spacing:1px;margin-bottom:10px;text-transform:uppercase}
+#upgrades-container{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.upgrade-btn{display:flex;flex-direction:column;align-items:center;gap:2px;background:#1a1a24;border:1px solid #4a3a66;color:#fff;border-radius:8px;padding:8px 4px;cursor:pointer;transition:.15s}
+.upgrade-btn:hover{border-color:var(--pink);transform:translateY(-1px)}
+.upg-icon{font-size:1.4rem}.upg-name{font-weight:bold;font-size:.85rem}
+.upg-price{font-size:.8rem;color:#aab}.upg-desc{font-size:.65rem;color:#aab;text-align:center}
+.upgrade-btn.affordable .upg-price{color:var(--green);font-weight:bold}
+.upgrade-btn.owned{border-color:var(--green);background:#16301f}.upgrade-btn.owned .upg-price{color:var(--green);font-weight:bold}
+
+/* ===== VISUAL v5: igual à referência (índigo + bordas violeta) ===== */
+:root{--bg-color:#0a0f2e;--panel-bg:#10163f;--line:#34358f}
+body{background-image:radial-gradient(ellipse at 50% 0,#151b55,#0a0f2e 62%)}
+#game-content{display:grid;grid-template-columns:260px minmax(0,1fr) 340px;grid-template-rows:auto minmax(0,1fr);grid-template-areas:"hud hud right" "left center right";gap:14px 16px;flex:1;min-height:0;max-width:1600px;width:100%}
+#hud{grid-area:hud}.left-panel{grid-area:left}.center-panel{grid-area:center}.right-panel{grid-area:right}
+#hud{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;max-width:none;margin:0;padding:0;background:none;box-shadow:none;flex-wrap:nowrap}
+#hud .hud-item,#hud .police-container{display:flex;flex-direction:row;align-items:center;gap:12px;width:auto;min-width:0;padding:12px 14px;background:linear-gradient(#151c58,#10163f);border:1px solid var(--line);border-radius:12px}
+.hud-ic{font-size:2rem;line-height:1}.hud-tx{display:flex;flex-direction:column;min-width:0;flex:1}
+.hud-tx b{font-size:.95rem;color:#fff}.hud-tx small{font-size:.75rem;color:#aab;font-weight:normal}
+#hud .money-text b{color:var(--green)}#hud .action-text b{color:var(--yellow)}#hud .followers-text b{color:#00e5ff}
+#hud .police-bar-bg{margin:4px 0 2px;height:8px}#hud .police-status{text-align:left;font-size:.75rem;color:#aab;margin:0}
+.left-panel,.center-panel,.right-panel{padding-top:0}
+
+/* jornal */
+.newspaper-header small{display:block;font:600 .7rem 'Times New Roman',serif;letter-spacing:4px;margin-top:2px}
+.center-panel .paper-body{margin-top:18px;align-items:stretch}
+.center-panel .photo{width:230px;height:150px;font-size:0}
+.center-panel .photo svg{position:absolute;inset:0;width:100%;height:100%}
+.ph-emoji{position:absolute;right:4px;bottom:16px;font-style:normal;font-size:1.3rem;background:rgba(244,235,208,.85);border-radius:6px;padding:0 4px}
+.center-panel .photo span{font-size:.55rem;background:rgba(244,235,208,.85);padding:2px 0}
+.center-panel .cols{height:150px}
+.paper-side{width:34%;flex:none;border-left:1px solid #8a806a;padding-left:12px;font-family:Georgia,serif;font-size:.8rem;color:#3a3326}
+.paper-side b{display:block;font-size:.95rem;margin-bottom:6px}.paper-side ul{padding-left:14px}.paper-side li{margin-bottom:6px}
+.paper-foot{display:flex;justify-content:space-between;margin-top:14px;padding-top:8px;border-top:1px solid #8a806a;font:italic .75rem Georgia,serif;color:#5a5240;text-align:left}
+
+/* caixas de estatísticas, slots e narrador */
+.editor-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;background:none;padding:0;border:0}
+.stat-box{display:flex;align-items:center;gap:10px;background:var(--panel-bg);border:2px dashed #f2b84b;border-radius:10px;padding:10px 12px;font-size:.9rem}
+.stat-box .ic{font-size:1.6rem}
+.slot{background:var(--panel-bg)}#narrator{background:var(--panel-bg)}
+.upgrades-panel,.sticker-panel,.viral-feed,.cop-card{background:var(--panel-bg);border:1px solid var(--line)}
+.cop-card{border-color:#6a3a8a}
+
+/* post-its compactos */
+.bills-card .postit{min-height:56px;padding:10px 14px 8px}
+.bills-card .postit-pin{padding-top:14px}.bills-card .postit-clip{padding-top:16px}.bills-card .postit-curl{padding-bottom:12px}
+.bills-card .postit .bill-name,.bills-card .postit .bill-cost{font-size:1.1rem}
+.bills-card .postit .bill-due{font-size:1rem}
+#bills-list{gap:12px}
+.bills-card .postit-pin::after{background:linear-gradient(225deg,#10163f 0 50%,#cbb94a 50% 100%)}
+.bills-card .postit-curl::after{background:linear-gradient(315deg,#10163f 0 45%,#d8c95a 45% 60%,#f7eea0 100%)}
+
+/* upgrades em linha, adesivos com ícone grande */
+#upgrades-container{grid-template-columns:repeat(4,1fr);gap:6px}
+.upgrade-btn{padding:8px 2px;background:#0a0f2e;border-color:var(--line)}
+.upg-icon{font-size:1.3rem}.upg-name{font-size:.75rem}.upg-price{font-size:.75rem}.upg-desc{font-size:.55rem}
+.sticker-btn{flex-direction:row;align-items:center;gap:14px;padding:12px 14px;background:#0a0f2e;border:1px solid var(--line);border-radius:10px}
+.sticker-btn:hover{background:#151b55;border-color:var(--pink)}
+.sticker-btn.active{background:var(--pink);border-color:#fff}
+.sticker-ic{font-size:2rem;line-height:1}.sticker-txt{display:flex;flex-direction:column;gap:4px;min-width:0}
+.sticker-title{font-size:.95rem}
+.right-panel .btn-lay-low{background:#0a2a3a;border-color:#00e5ff}
+
+@media(max-width:900px){
+  #game-content{grid-template-columns:1fr;grid-template-rows:auto;grid-template-areas:"hud" "left" "center" "right"}
+  #hud{grid-template-columns:repeat(2,1fr)}
+  .editor-stats{grid-template-columns:1fr}
+}
+
+/* ===== ÍCONES SVG ===== */
+.hud-ic{width:36px;height:36px;flex:none;display:block}.hud-ic svg{width:100%;height:100%}
+.stat-box .ic{width:30px;height:30px;flex:none;display:block}.stat-box .ic svg{width:100%;height:100%}
+.sticker-ic{width:38px;height:38px;flex:none;display:flex;align-items:center;justify-content:center;font-size:2rem}.sticker-ic svg{width:100%;height:100%}
+.upg-icon{width:28px;height:28px;display:block}.upg-icon svg{width:100%;height:100%}
+.btn-ic{display:inline-block;width:18px;height:18px;vertical-align:-3px;margin-right:6px}.btn-ic svg{width:100%;height:100%}
+.sticker-btn.active .sticker-ic svg{filter:drop-shadow(0 0 2px #fff)}
+
+/* ===== ARTES RECORTADAS DA IMAGEM DE REFERÊNCIA (img/ui) ===== */
+.hud-ic{width:46px;height:46px}.hud-ic img,.stat-box .ic img,.upg-icon img,.btn-ic img,.sticker-ic img,.n-ic img,.cop-face img{width:100%;height:100%;object-fit:contain;display:block}
+.stat-box .ic{width:36px;height:36px}
+.upg-icon{width:34px;height:34px}
+.sticker-ic{width:46px;height:46px}
+.btn-ic{width:22px;height:22px;vertical-align:-5px;margin-right:8px}
+.n-ic{display:inline-block;width:26px;height:26px;vertical-align:middle;margin-right:10px}
+#narrator{display:flex;align-items:center}
+.cop-face{width:64px;height:64px;flex:none;font-size:0}.cop-face span{display:block;width:100%;height:100%}
+.center-panel .photo{width:250px;height:165px;font-size:0;filter:none;background:none;border:2px solid #8a7e63}
+.photo-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.center-panel .cols{height:165px}
+
+/* ===== TOPO MAIS COMPACTO (HUD + upgrades) ===== */
+#game-screen{padding:10px 14px}
+#game-content{gap:8px 14px}
+#hud{gap:8px}
+#hud .hud-item,#hud .police-container{padding:6px 10px;gap:8px;border-radius:10px}
+.hud-ic{width:30px;height:30px}
+.hud-tx b{font-size:.8rem;line-height:1.15}
+.hud-tx small{font-size:.65rem;line-height:1.1}
+#hud .police-bar-bg{height:5px;margin:3px 0 1px}
+#hud .police-status{font-size:.65rem}
+.upgrades-panel{padding:8px 10px}
+.upgrades-panel h3{font-size:.8rem;margin-bottom:6px}
+#upgrades-container{gap:5px}
+.upgrade-btn{padding:5px 2px;gap:1px;border-radius:7px}
+.upg-icon{width:24px;height:24px}
+.upg-name{font-size:.7rem}.upg-price{font-size:.68rem}.upg-desc{font-size:.5rem;line-height:1.1}
+.right-panel{gap:8px}
+.right-panel .btn-lay-low{padding:9px}
+
+/* ===== COLUNA ESQUERDA MAIS COMPACTA + NÍVEL DA CASA ===== */
+#game-content{grid-template-columns:225px minmax(0,1fr) 340px}
+.left-panel{gap:10px}
+.house-card.polaroid{padding:10px 10px 10px;margin-top:10px}
+.house-card.polaroid .house-img{height:125px}
+.polaroid h3#house-name{font-size:1.35rem;padding:8px 0 2px}
+.polaroid .btn-upgrade{font-size:1.05rem}
+.polaroid #house-prog-txt{font-size:.85rem}
+.house-dots{display:flex;justify-content:center;gap:4px;margin:4px 0 2px}
+.house-dots i{width:9px;height:9px;border-radius:50%;background:#d8d2c1;box-shadow:inset 0 1px 2px rgba(0,0,0,.3)}
+.house-dots i.on{background:#5b7f4a}
+.cop-card{padding:8px 10px;gap:10px;font-size:.8rem}
+.cop-face{width:42px;height:42px}
+.cop-info b{font-size:.9rem}#cop-clues{font-size:.9rem;margin:2px 0}
+.bills-card h3{font-size:1.4rem;margin-bottom:8px}
+#bills-list{gap:10px;padding:4px 4px 2px}
+.bills-card .postit{min-height:46px;padding:8px 12px 6px}
+.bills-card .postit-pin{padding-top:10px;padding-right:30px}
+.bills-card .postit-clip{padding-top:12px}.bills-card .postit-clip .bill-cost{margin-right:26px}
+.bills-card .postit-curl{padding-bottom:10px;padding-right:30px}
+.bills-card .postit .bill-name,.bills-card .postit .bill-cost{font-size:1rem}
+.bills-card .postit .bill-due{font-size:.9rem}
+.left-panel .btn-end-day{padding:10px;font-size:.85rem}

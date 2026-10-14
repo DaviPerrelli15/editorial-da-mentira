@@ -101,10 +101,13 @@ let state = {
         closeCalls: 0
     },
     bills: [
+        { id: "water", name: "💧 Água", cost: 8, daysLeft: 4, freq: 4, strikes: 0 },
+        { id: "energy", name: "⚡ Energia", cost: 12, daysLeft: 3, freq: 3, strikes: 0 },
+        { id: "groceries", name: "🛒 Compras", cost: 15, daysLeft: 1, freq: 1, strikes: 0 },
         { id: "rent", name: "🏠 Aluguel", cost: 50, daysLeft: 5, freq: 5, strikes: 0 },
-        { id: "internet", name: "📱 Internet", cost: 30, daysLeft: 3, freq: 3, strikes: 0 },
-        { id: "food", name: "🍔 Comida", cost: 15, daysLeft: 1, freq: 1, strikes: 0 }
+        { id: "internet", name: "📱 Internet", cost: 30, daysLeft: 3, freq: 3, strikes: 0 }
     ],
+    upgrades: [],
     activePosts: [], // { id, text, views, profit, risk, viralPower, day, factChecked }
     history: []
 };
@@ -130,11 +133,13 @@ function startGame() {
         day: 1, actions: 3, maxActions: 3, money: 100, followers: 10, reputation: 100, police: 0, houseLevel: 1,
         stats: { daysSurvived: 0, maxViral: 0, totalPubs: 0, closeCalls: 0 },
         bills: [
+            { id: "water", name: "💧 Água", cost: 8, daysLeft: 4, freq: 4, strikes: 0 },
+            { id: "energy", name: "⚡ Energia", cost: 12, daysLeft: 3, freq: 3, strikes: 0 },
+            { id: "groceries", name: "🛒 Compras", cost: 15, daysLeft: 1, freq: 1, strikes: 0 },
             { id: "rent", name: "🏠 Aluguel", cost: HOUSES[0].rent, daysLeft: 5, freq: 5, strikes: 0 },
-            { id: "internet", name: "📱 Internet", cost: 30, daysLeft: 3, freq: 3, strikes: 0 },
-            { id: "food", name: "🍔 Comida", cost: 15, daysLeft: 1, freq: 1, strikes: 0 }
+            { id: "internet", name: "📱 Internet", cost: 30, daysLeft: 3, freq: 3, strikes: 0 }
         ],
-        activePosts: [], history: []
+        upgrades: [], activePosts: [], history: []
     };
     switchScreen('game-screen');
     renderStickers();
@@ -173,7 +178,7 @@ function showRules() {
     document.getElementById('info-desc').innerHTML = `
         - Edite notícias monótonas adicionando adesivos.<br>
         - Adesivos aumentam seu lucro, mas chamam <b>Atenção Policial</b>.<br>
-        - Sobreviva pagando contas de aluguel, internet e comida.<br>
+        - Sobreviva pagando as contas: água, energia, compras, aluguel e internet.<br>
         - Junte dinheiro para melhorar de casa.<br>
         - Se a polícia chegar a 100%, <b>VOCÊ ESTÁ PRESO!</b>
     `;
@@ -184,9 +189,94 @@ function closeInfoModal() {
     document.getElementById('info-modal').classList.remove('show');
 }
 
+/* ================= ÍCONES (SVG) ================= */
+const ICONS = {
+    coin: `<img src="img/ui/hud-coin.png" alt="">`,
+    calendar: `<img src="img/ui/hud-calendar.png" alt="">`,
+    bolt: `<img src="img/ui/hud-bolt.png" alt="">`,
+    users: `<img src="img/ui/hud-users.png" alt="">`,
+    star: `<img src="img/ui/hud-star.png" alt="">`,
+    siren: `<img src="img/ui/hud-siren.png" alt="">`,
+    warn: `<img src="img/ui/stat-warn.png" alt="">`,
+    chart: `<img src="img/ui/stat-chart.png" alt="">`,
+    doc: `<img src="img/ui/stk-doc.png" alt="">`,
+    eye: `<img src="img/ui/stk-eye.png" alt="">`,
+    flame: `<img src="img/ui/stk-flame.png" alt="">`,
+    pencil: `<img src="img/ui/stk-pencil.png" alt="">`,
+    mega: `<img src="img/ui/stk-mega.png" alt="">`,
+    alien: `<img src="img/ui/stk-alien.png" alt="">`,
+    pill: `<img src="img/ui/stk-pill.png" alt="">`,
+    reporter: `<img src="img/ui/up-reporter.png" alt="">`,
+    camera: `<img src="img/ui/up-camera.png" alt="">`,
+    speak: `<img src="img/ui/up-fonte.png" alt="">`,
+    editor: `<img src="img/ui/up-editor.png" alt="">`,
+    person: `<img src="img/ui/ic-person.png" alt="">`,
+    cop: `<img src="img/ui/cop.png" alt="">`,
+    narr: `<img src="img/ui/ic-narr.png" alt="">`,
+    cancelx: `<img src="img/ui/ic-cancel.png" alt="">`,
+    pflame: `<img src="img/ui/ic-flame.png" alt="">`
+};
+const EMOJI_ICON = { '😱': 'doc', '👁': 'eye', '🔥': 'flame', '🧪': 'pencil', '📢': 'mega', '📣': 'mega', '🛸': 'alien', '💊': 'pill' };
+function applyIcons() { document.querySelectorAll('[data-ico]').forEach(el => { if (ICONS[el.dataset.ico]) el.innerHTML = ICONS[el.dataset.ico]; }); }
+
+/* ================= NÍVEL DA CASA (bolinhas) ================= */
+function renderHouseDots(n) {
+    const el = document.getElementById('house-dots');
+    if(!el) return;
+    if(!el.children.length) { for(let i = 1; i <= 10; i++) el.appendChild(document.createElement('i')); }
+    [...el.children].forEach((d, i) => { d.className = i < n ? 'on' : ''; });
+}
+
+/* ================= UPGRADES ================= */
+const UPGRADES = [
+    { id: "reporter", icon: "reporter", name: "Repórter", cost: 150, desc: "+20% de lucro" },
+    { id: "camera", icon: "camera", name: "Câmera", cost: 200, desc: "+25% de visualizações" },
+    { id: "fonte", icon: "speak", name: "Fonte", cost: 300, desc: "-2% de risco por manchete" },
+    { id: "editor", icon: "editor", name: "Editor", cost: 400, desc: "+25% de seguidores" }
+];
+const hasUpg = id => !!(state.upgrades && state.upgrades.includes(id));
+
+function renderUpgrades() {
+    const cont = document.getElementById('upgrades-container');
+    if(!cont) return;
+    if(!cont.children.length) {
+        UPGRADES.forEach(u => {
+            const b = document.createElement('button');
+            b.className = 'upgrade-btn'; b.id = 'upg-' + u.id; b.title = u.desc;
+            b.onclick = () => buyUpgrade(u.id);
+            b.innerHTML = `<span class="upg-icon">${ICONS[u.icon]}</span><span class="upg-name">${u.name}</span><span class="upg-price"></span><span class="upg-desc">${u.desc}</span>`;
+            cont.appendChild(b);
+        });
+    }
+    UPGRADES.forEach(u => {
+        const b = document.getElementById('upg-' + u.id);
+        if(!b) return;
+        const owned = hasUpg(u.id);
+        b.classList.toggle('owned', owned);
+        b.classList.toggle('affordable', !owned && state.money >= u.cost);
+        b.querySelector('.upg-price').innerText = owned ? '✓ Comprado' : 'R$ ' + u.cost;
+    });
+}
+
+function buyUpgrade(id) {
+    const u = UPGRADES.find(x => x.id === id);
+    if(!u || hasUpg(id)) return;
+    if(state.money < u.cost) {
+        showModal("Sem dinheiro", `Você precisa de R$ ${u.cost} para contratar: ${u.name}.`, [{text: "Ok", action: closeEventModal}]);
+        return;
+    }
+    soundClick();
+    state.upgrades = state.upgrades || [];
+    state.upgrades.push(id);
+    changeMoney(-u.cost);
+    renderUpgrades();
+    updateEditor();
+}
+
 /* ================= CORE LOGIC ================= */
 function updateHUD() {
     tweenMoney();
+    renderUpgrades();
     document.getElementById('hud-day').innerText = weekOf(state.day);
     document.getElementById('hud-actions').innerText = `${state.actions}/${state.maxActions}`;
     document.getElementById('hud-followers').innerText = formatNumber(state.followers);
@@ -221,6 +311,7 @@ function updateHUD() {
     // Casa
     let house = HOUSES[state.houseLevel - 1];
     document.getElementById('house-name').innerText = `Nível ${house.level}: ${house.name}`;
+    renderHouseDots(house.level);
     document.getElementById('house-image').style.backgroundImage = `url('${house.img}')`;
     
     let upBtn = document.getElementById('btn-upgrade-house');
@@ -303,7 +394,8 @@ function renderStickers() {
         btn.onclick = () => toggleSticker(s.id);
         btn.draggable = true;
         btn.ondragstart = e => e.dataTransfer.setData('text', s.id);
-        btn.innerHTML = `<span class="sticker-title">${s.name}</span><span class="sticker-fx">${s.desc}</span>`;
+        const _m = s.name.match(/^(\S+)\s+(.*)$/);
+        btn.innerHTML = `<span class="sticker-ic">${_m ? (ICONS[EMOJI_ICON[[..._m[1]][0]]] || _m[1]) : ''}</span><span class="sticker-txt"><span class="sticker-title">${_m ? _m[2] : s.name}</span><span class="sticker-fx">${s.desc}</span></span>`;
         cont.appendChild(btn);
     });
 }
@@ -380,6 +472,7 @@ function updateEditor() {
 
     totalMultViral = Math.min(totalMultViral, 12);
     totalRisk = Math.round(totalRisk * (1 + 0.05 * Math.log10(Math.max(state.followers,10))) * (state.houseLevel >= 3 ? 0.9 : 1));
+    if(hasUpg('fonte')) totalRisk = Math.max(0, totalRisk - 2);
     finalHeadline = prefix + currentBaseNews.replace('.', '') + suffix;
     
     // Modify case based on risk
@@ -393,6 +486,7 @@ function updateEditor() {
 
     // Reputação baixa pune o lucro
     if(state.reputation < 30) estProfit *= 0.5;
+    if(hasUpg('reporter')) estProfit *= 1.2;
 
     document.getElementById('est-profit').innerText = Math.floor(estProfit);
     document.getElementById('est-risk').innerText = totalRisk;
@@ -434,7 +528,7 @@ function publishNews() {
     let post = {
         id: Date.now(),
         text: document.getElementById('headline-text').innerText,
-        views: 100 * totalMultViral * (state.followers > 0 ? (state.followers * 0.1) : 1),
+        views: 100 * totalMultViral * (state.followers > 0 ? (state.followers * 0.1) : 1) * (hasUpg('camera') ? 1.25 : 1),
         profit: profit,
         risk: risk,
         viralPower: totalMultViral + (comboBonus ? 2 : 0),
@@ -450,6 +544,7 @@ function publishNews() {
     
     // Ganha seguidores (Baseado no risco/viral)
     let newFolls = Math.floor((4 + risk * 1.2) * Math.pow(totalMultViral, 0.7) * (1 + state.followers / 100));
+    if(hasUpg('editor')) newFolls = Math.floor(newFolls * 1.25);
     state.followers += newFolls;
 
     renderActivePosts();
