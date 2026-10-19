@@ -32,7 +32,7 @@ const HOUSES = [
     { level: 4, name: "Casa Melhor", img: "img/casa4.jpg", cost: 2000, rent: 150, perk: "Seguidores crescem +1% ao dia sozinhos." },
     { level: 5, name: "Casa Confortável", img: "img/casa5.jpg", cost: 3500, rent: 220, perk: "Atrai patrocinadores básicos." },
     { level: 6, name: "Casa Moderna", img: "img/casa6.jpg", cost: 6000, rent: 320, perk: "Reputação cai mais devagar." },
-    { level: 7, name: "Casa Grande", img: "img/casa7.jpg", cost: 10000, rent: 460, perk: "Permite 1 ação extra por semana." },
+    { level: 7, name: "Casa Grande", img: "img/casa7.jpg", cost: 10000, rent: 460, perk: "Permite 1 ação extra por dia." },
     { level: 8, name: "Casa de Luxo", img: "img/casa8.jpg", cost: 17000, rent: 650, perk: "Patrocinadores premium." },
     { level: 9, name: "Altíssimo Padrão", img: "img/casa9.jpg", cost: 30000, rent: 900, perk: "Policiais corruptos aceitam suborno automático." },
     { level: 10, name: "Mansão", img: "img/casa10.jpg", cost: 55000, rent: 1300, perk: "Você venceu no capitalismo. Cuidado com o imposto." }
@@ -77,13 +77,6 @@ const COMBOS = [
     }
 ];
 
-/* ================= TEMPO: 1 turno = 1 semana (7 dias) ================= */
-const DAYS_PER_WEEK = 7;
-// state.day continua contando DIAS corridos (contas, posts e save usam isso).
-// A semana exibida é derivada dele.
-const weekOf = day => Math.floor((day - 1) / DAYS_PER_WEEK) + 1;
-const weeksSurvived = () => Math.floor(state.stats.daysSurvived / DAYS_PER_WEEK);
-
 /* ================= ESTADO DO JOGO ================= */
 let state = {
     day: 1,
@@ -101,13 +94,10 @@ let state = {
         closeCalls: 0
     },
     bills: [
-        { id: "water", name: "💧 Água", cost: 8, daysLeft: 4, freq: 4, strikes: 0 },
-        { id: "energy", name: "⚡ Energia", cost: 12, daysLeft: 3, freq: 3, strikes: 0 },
-        { id: "groceries", name: "🛒 Compras", cost: 15, daysLeft: 1, freq: 1, strikes: 0 },
         { id: "rent", name: "🏠 Aluguel", cost: 50, daysLeft: 5, freq: 5, strikes: 0 },
-        { id: "internet", name: "📱 Internet", cost: 30, daysLeft: 3, freq: 3, strikes: 0 }
+        { id: "internet", name: "📱 Internet", cost: 30, daysLeft: 3, freq: 3, strikes: 0 },
+        { id: "food", name: "🍔 Comida", cost: 15, daysLeft: 1, freq: 1, strikes: 0 }
     ],
-    upgrades: [],
     activePosts: [], // { id, text, views, profit, risk, viralPower, day, factChecked }
     history: []
 };
@@ -117,8 +107,8 @@ let activeStickers = [];
 
 /* ================= INICIALIZAÇÃO ================= */
 window.onload = () => {
-    if(localStorage.getItem('editorial_record_weeks')) {
-        document.getElementById('high-score-display').innerText = "Recorde: " + localStorage.getItem('editorial_record_weeks') + " semanas";
+    if(localStorage.getItem('editorial_record')) {
+        document.getElementById('high-score-display').innerText = "Recorde: " + localStorage.getItem('editorial_record') + " dias";
     }
     if(localStorage.getItem('editorial_mentira_save')) {
         document.getElementById('btn-continue').style.display = 'inline-block';
@@ -133,13 +123,11 @@ function startGame() {
         day: 1, actions: 3, maxActions: 3, money: 100, followers: 10, reputation: 100, police: 0, houseLevel: 1,
         stats: { daysSurvived: 0, maxViral: 0, totalPubs: 0, closeCalls: 0 },
         bills: [
-            { id: "water", name: "💧 Água", cost: 8, daysLeft: 4, freq: 4, strikes: 0 },
-            { id: "energy", name: "⚡ Energia", cost: 12, daysLeft: 3, freq: 3, strikes: 0 },
-            { id: "groceries", name: "🛒 Compras", cost: 15, daysLeft: 1, freq: 1, strikes: 0 },
             { id: "rent", name: "🏠 Aluguel", cost: HOUSES[0].rent, daysLeft: 5, freq: 5, strikes: 0 },
-            { id: "internet", name: "📱 Internet", cost: 30, daysLeft: 3, freq: 3, strikes: 0 }
+            { id: "internet", name: "📱 Internet", cost: 30, daysLeft: 3, freq: 3, strikes: 0 },
+            { id: "food", name: "🍔 Comida", cost: 15, daysLeft: 1, freq: 1, strikes: 0 }
         ],
-        upgrades: [], activePosts: [], history: []
+        activePosts: [], history: []
     };
     switchScreen('game-screen');
     renderStickers();
@@ -178,7 +166,7 @@ function showRules() {
     document.getElementById('info-desc').innerHTML = `
         - Edite notícias monótonas adicionando adesivos.<br>
         - Adesivos aumentam seu lucro, mas chamam <b>Atenção Policial</b>.<br>
-        - Sobreviva pagando as contas: água, energia, compras, aluguel e internet.<br>
+        - Sobreviva pagando contas de aluguel, internet e comida.<br>
         - Junte dinheiro para melhorar de casa.<br>
         - Se a polícia chegar a 100%, <b>VOCÊ ESTÁ PRESO!</b>
     `;
@@ -189,95 +177,10 @@ function closeInfoModal() {
     document.getElementById('info-modal').classList.remove('show');
 }
 
-/* ================= ÍCONES (SVG) ================= */
-const ICONS = {
-    coin: `<img src="img/ui/hud-coin.png" alt="">`,
-    calendar: `<img src="img/ui/hud-calendar.png" alt="">`,
-    bolt: `<img src="img/ui/hud-bolt.png" alt="">`,
-    users: `<img src="img/ui/hud-users.png" alt="">`,
-    star: `<img src="img/ui/hud-star.png" alt="">`,
-    siren: `<img src="img/ui/hud-siren.png" alt="">`,
-    warn: `<img src="img/ui/stat-warn.png" alt="">`,
-    chart: `<img src="img/ui/stat-chart.png" alt="">`,
-    doc: `<img src="img/ui/stk-doc.png" alt="">`,
-    eye: `<img src="img/ui/stk-eye.png" alt="">`,
-    flame: `<img src="img/ui/stk-flame.png" alt="">`,
-    pencil: `<img src="img/ui/stk-pencil.png" alt="">`,
-    mega: `<img src="img/ui/stk-mega.png" alt="">`,
-    alien: `<img src="img/ui/stk-alien.png" alt="">`,
-    pill: `<img src="img/ui/stk-pill.png" alt="">`,
-    reporter: `<img src="img/ui/up-reporter.png" alt="">`,
-    camera: `<img src="img/ui/up-camera.png" alt="">`,
-    speak: `<img src="img/ui/up-fonte.png" alt="">`,
-    editor: `<img src="img/ui/up-editor.png" alt="">`,
-    person: `<img src="img/ui/ic-person.png" alt="">`,
-    cop: `<img src="img/ui/cop.png" alt="">`,
-    narr: `<img src="img/ui/ic-narr.png" alt="">`,
-    cancelx: `<img src="img/ui/ic-cancel.png" alt="">`,
-    pflame: `<img src="img/ui/ic-flame.png" alt="">`
-};
-const EMOJI_ICON = { '😱': 'doc', '👁': 'eye', '🔥': 'flame', '🧪': 'pencil', '📢': 'mega', '📣': 'mega', '🛸': 'alien', '💊': 'pill' };
-function applyIcons() { document.querySelectorAll('[data-ico]').forEach(el => { if (ICONS[el.dataset.ico]) el.innerHTML = ICONS[el.dataset.ico]; }); }
-
-/* ================= NÍVEL DA CASA (bolinhas) ================= */
-function renderHouseDots(n) {
-    const el = document.getElementById('house-dots');
-    if(!el) return;
-    if(!el.children.length) { for(let i = 1; i <= 10; i++) el.appendChild(document.createElement('i')); }
-    [...el.children].forEach((d, i) => { d.className = i < n ? 'on' : ''; });
-}
-
-/* ================= UPGRADES ================= */
-const UPGRADES = [
-    { id: "reporter", icon: "reporter", name: "Repórter", cost: 150, desc: "+20% de lucro" },
-    { id: "camera", icon: "camera", name: "Câmera", cost: 200, desc: "+25% de visualizações" },
-    { id: "fonte", icon: "speak", name: "Fonte", cost: 300, desc: "-2% de risco por manchete" },
-    { id: "editor", icon: "editor", name: "Editor", cost: 400, desc: "+25% de seguidores" }
-];
-const hasUpg = id => !!(state.upgrades && state.upgrades.includes(id));
-
-function renderUpgrades() {
-    const cont = document.getElementById('upgrades-container');
-    if(!cont) return;
-    if(!cont.children.length) {
-        UPGRADES.forEach(u => {
-            const b = document.createElement('button');
-            b.className = 'upgrade-btn'; b.id = 'upg-' + u.id; b.title = u.desc;
-            b.onclick = () => buyUpgrade(u.id);
-            b.innerHTML = `<span class="upg-icon">${ICONS[u.icon]}</span><span class="upg-name">${u.name}</span><span class="upg-price"></span><span class="upg-desc">${u.desc}</span>`;
-            cont.appendChild(b);
-        });
-    }
-    UPGRADES.forEach(u => {
-        const b = document.getElementById('upg-' + u.id);
-        if(!b) return;
-        const owned = hasUpg(u.id);
-        b.classList.toggle('owned', owned);
-        b.classList.toggle('affordable', !owned && state.money >= u.cost);
-        b.querySelector('.upg-price').innerText = owned ? '✓ Comprado' : 'R$ ' + u.cost;
-    });
-}
-
-function buyUpgrade(id) {
-    const u = UPGRADES.find(x => x.id === id);
-    if(!u || hasUpg(id)) return;
-    if(state.money < u.cost) {
-        showModal("Sem dinheiro", `Você precisa de R$ ${u.cost} para contratar: ${u.name}.`, [{text: "Ok", action: closeEventModal}]);
-        return;
-    }
-    soundClick();
-    state.upgrades = state.upgrades || [];
-    state.upgrades.push(id);
-    changeMoney(-u.cost);
-    renderUpgrades();
-    updateEditor();
-}
-
 /* ================= CORE LOGIC ================= */
 function updateHUD() {
     tweenMoney();
-    renderUpgrades();
-    document.getElementById('hud-day').innerText = weekOf(state.day);
+    document.getElementById('hud-day').innerText = state.day;
     document.getElementById('hud-actions').innerText = `${state.actions}/${state.maxActions}`;
     document.getElementById('hud-followers').innerText = formatNumber(state.followers);
     
@@ -311,7 +214,6 @@ function updateHUD() {
     // Casa
     let house = HOUSES[state.houseLevel - 1];
     document.getElementById('house-name').innerText = `Nível ${house.level}: ${house.name}`;
-    renderHouseDots(house.level);
     document.getElementById('house-image').style.backgroundImage = `url('${house.img}')`;
     
     let upBtn = document.getElementById('btn-upgrade-house');
@@ -394,8 +296,7 @@ function renderStickers() {
         btn.onclick = () => toggleSticker(s.id);
         btn.draggable = true;
         btn.ondragstart = e => e.dataTransfer.setData('text', s.id);
-        const _m = s.name.match(/^(\S+)\s+(.*)$/);
-        btn.innerHTML = `<span class="sticker-ic">${_m ? (ICONS[EMOJI_ICON[[..._m[1]][0]]] || _m[1]) : ''}</span><span class="sticker-txt"><span class="sticker-title">${_m ? _m[2] : s.name}</span><span class="sticker-fx">${s.desc}</span></span>`;
+        btn.innerHTML = `<span class="sticker-title">${s.name}</span><span class="sticker-fx">${s.desc}</span>`;
         cont.appendChild(btn);
     });
 }
@@ -472,7 +373,6 @@ function updateEditor() {
 
     totalMultViral = Math.min(totalMultViral, 12);
     totalRisk = Math.round(totalRisk * (1 + 0.05 * Math.log10(Math.max(state.followers,10))) * (state.houseLevel >= 3 ? 0.9 : 1));
-    if(hasUpg('fonte')) totalRisk = Math.max(0, totalRisk - 2);
     finalHeadline = prefix + currentBaseNews.replace('.', '') + suffix;
     
     // Modify case based on risk
@@ -486,7 +386,6 @@ function updateEditor() {
 
     // Reputação baixa pune o lucro
     if(state.reputation < 30) estProfit *= 0.5;
-    if(hasUpg('reporter')) estProfit *= 1.2;
 
     document.getElementById('est-profit').innerText = Math.floor(estProfit);
     document.getElementById('est-risk').innerText = totalRisk;
@@ -504,7 +403,7 @@ function publishNews() {
     // Validar se tem strike de internet
     let inetBill = state.bills.find(b => b.id === 'internet');
     if(inetBill.strikes > 0) {
-        showModal("Sem Internet", "Sua internet foi cortada por falta de pagamento. Você não pode publicar até pagar a conta.", [{text: "Droga!", action: closeEventModal}]);
+        showModal("Sem Internet", "Sua internet foi cortada por falta de pagamento. Você não pode publicar hoje.", [{text: "Droga!", action: closeEventModal}]);
         return;
     }
 
@@ -528,7 +427,7 @@ function publishNews() {
     let post = {
         id: Date.now(),
         text: document.getElementById('headline-text').innerText,
-        views: 100 * totalMultViral * (state.followers > 0 ? (state.followers * 0.1) : 1) * (hasUpg('camera') ? 1.25 : 1),
+        views: 100 * totalMultViral * (state.followers > 0 ? (state.followers * 0.1) : 1),
         profit: profit,
         risk: risk,
         viralPower: totalMultViral + (comboBonus ? 2 : 0),
@@ -544,7 +443,6 @@ function publishNews() {
     
     // Ganha seguidores (Baseado no risco/viral)
     let newFolls = Math.floor((4 + risk * 1.2) * Math.pow(totalMultViral, 0.7) * (1 + state.followers / 100));
-    if(hasUpg('editor')) newFolls = Math.floor(newFolls * 1.25);
     state.followers += newFolls;
 
     renderActivePosts();
@@ -591,75 +489,30 @@ function upgradeHouse() {
     }
 }
 
-/* ================= FIM DA SEMANA / LOOP ================= */
-// Encerrar a semana simula 7 dias seguidos (contas, viralização, atenção passiva).
-// As ações voltam ao máximo UMA vez, no começo da nova semana.
-function endWeek() {
+/* ================= FIM DO DIA / LOOP ================= */
+function endDay() {
     soundClick();
+    state.day++;
     state.actions = state.maxActions;
+    state.stats.daysSurvived++;
 
+    // Processar Contas
     let despejado = false;
-    let weekProfit = 0;
-    let weekRisk = 0;
-    let factCheckPost = null;
-    const struck = {}; // cada conta só leva 1 "strike" por semana (o jogador não pode agir no meio dela)
-
-    for (let d = 0; d < DAYS_PER_WEEK; d++) {
-        state.day++;
-        state.stats.daysSurvived++;
-
-        // ----- Contas do dia -----
-        state.bills.forEach(b => {
-            b.daysLeft--;
-            if(b.daysLeft <= 0) {
-                if(state.money >= b.cost) {
-                    changeMoney(-b.cost);
-                    b.daysLeft = b.freq;
-                    b.strikes = 0; // Pagou, zera strike
-                } else if(!struck[b.id]) {
-                    struck[b.id] = true;
-                    b.strikes++;
-                    if(b.id === 'rent' && b.strikes >= 2) despejado = true;
-                }
-            }
-        });
-        if(despejado) break;
-
-        // ----- Viralização do dia -----
-        let removedPosts = [];
-        state.activePosts.forEach((p, i) => {
-            if(p.factChecked) return;
-
-            if(p.viralPower > 1.2) {
-                let viewsGain = Math.floor(p.views * (Math.random() * 0.5 + 0.1) * p.viralPower);
-                p.views += viewsGain;
-
-                let profitGain = Math.floor((viewsGain / 1000) * 2);
-                if(profitGain > 0) {
-                    state.money += profitGain; // entra na hora, para ajudar a pagar as contas dos próximos dias
-                    weekProfit += profitGain;
-                    p.profit += profitGain;
-                }
-
-                if(p.views > 20000 && Math.random() < 0.4) weekRisk += 3;
-                if(p.views > 200000 && Math.random() < 0.5) weekRisk += 5;
-
-                p.viralPower -= 0.3;
-
-                if(p.views > state.stats.maxViral) state.stats.maxViral = p.views;
-
-                // Chance de checagem (no máximo 1 evento por semana)
-                if(!factCheckPost && p.views > 10000 && Math.random() < 0.1) factCheckPost = p;
+    state.bills.forEach(b => {
+        b.daysLeft--;
+        if(b.daysLeft <= 0) {
+            if(state.money >= b.cost) {
+                changeMoney(-b.cost);
+                b.daysLeft = b.freq;
+                b.strikes = 0; // Pagou, zera strike
             } else {
-                removedPosts.push(i);
+                b.strikes++;
+                if(b.id === 'rent' && b.strikes >= 2) {
+                    despejado = true;
+                }
             }
-        });
-        removedPosts.reverse().forEach(idx => state.activePosts.splice(idx, 1));
-
-        // Atenção passiva do dia
-        weekRisk += 1.6 * Math.log10(Math.max(state.followers, 10)) + state.activePosts.length * 1.0;
-        if(state.houseLevel >= 4) state.followers = Math.floor(state.followers * 1.01);
-    }
+        }
+    });
 
     if(despejado) {
         triggerGameOver("DESPEJADO", "Você não pagou o aluguel várias vezes e o proprietário chamou a polícia para te tirar da casa.");
@@ -671,16 +524,56 @@ function endWeek() {
         return;
     }
 
-    if(weekProfit > 0) { soundMoney(); floatText('+R$ ' + Math.floor(weekProfit).toLocaleString('pt-BR')); }
-    if(weekRisk > 0) changePolice(weekRisk);
+    // Processar Viralização
+    let dailyViralProfit = 0;
+    let dailyViralRisk = 0;
+    let removedPosts = [];
 
-    if(factCheckPost) setTimeout(() => triggerFactCheckEvent(factCheckPost), 1000);
+    state.activePosts.forEach((p, i) => {
+        if(p.factChecked) return;
+
+        if(p.viralPower > 1.2) {
+            let viewsGain = Math.floor(p.views * (Math.random() * 0.5 + 0.1) * p.viralPower);
+            p.views += viewsGain;
+            
+            let profitGain = Math.floor((viewsGain / 1000) * 2); // Ex: R$5 a cada 1k views extras
+            if(profitGain > 0) {
+                dailyViralProfit += profitGain;
+                p.profit += profitGain;
+            }
+
+            // Risco passivo
+            if(p.views > 20000 && Math.random() < 0.4) dailyViralRisk += 3;
+            if(p.views > 200000 && Math.random() < 0.5) dailyViralRisk += 5;
+
+            // Decaimento natural
+            p.viralPower -= 0.3; 
+            
+            if(p.views > state.stats.maxViral) state.stats.maxViral = p.views;
+
+            // Chance de Checagem
+            if(p.views > 10000 && Math.random() < 0.1) {
+                setTimeout(() => triggerFactCheckEvent(p), 1000);
+            }
+        } else {
+            removedPosts.push(i);
+        }
+    });
+
+    // Remove posts que esfriaram
+    removedPosts.reverse().forEach(idx => state.activePosts.splice(idx, 1));
+
+    // Atenção passiva: canal grande e posts quentes chamam polícia sozinhos
+    dailyViralRisk += 1.6 * Math.log10(Math.max(state.followers, 10)) + state.activePosts.length * 1.0;
+    if(state.houseLevel >= 4) state.followers = Math.floor(state.followers * 1.01);
+    if(dailyViralProfit > 0) changeMoney(dailyViralProfit);
+    if(dailyViralRisk > 0) changePolice(dailyViralRisk);
 
     renderBills();
     renderActivePosts();
     updateHUD();
 
-    // Evento da semana baseado na tensão
+    // Eventos do início do dia baseados na tensão
     if(state.police >= 100) {
         triggerPrisonSequence();
         return;
@@ -771,13 +664,13 @@ function triggerFactCheckEvent(post) {
 }
 
 function resurrectOldPost() {
-    let oldPosts = state.history.filter(p => p.day < state.day - DAYS_PER_WEEK && !p.factChecked);
+    let oldPosts = state.history.filter(p => p.day < state.day - 3 && !p.factChecked);
     if(oldPosts.length === 0) return;
     let p = oldPosts[Math.floor(Math.random() * oldPosts.length)];
     
     soundAlert();
     showModal("⚠️ FANTASMA DO PASSADO", 
-        `Um vídeo do YouTube acaba de usar sua matéria da semana ${weekOf(p.day)} como fonte!<br><i>"${p.text}"</i><br>Ela voltou a viralizar fortemente!`, 
+        `Um vídeo do YouTube acaba de usar sua matéria do dia ${p.day} como fonte!<br><i>"${p.text}"</i><br>Ela voltou a viralizar fortemente!`, 
         [{text: "Opa, dinheiro de graça!", action: () => {
             p.viralPower = 3.0; // Volta pra ativa
             p.factChecked = false;
@@ -898,9 +791,9 @@ function resolvePrison(choice) {
 }
 
 function triggerGameOver(title, reason) {
-    let rec = localStorage.getItem('editorial_record_weeks');
-    if(!rec || weeksSurvived() > parseInt(rec)) {
-        localStorage.setItem('editorial_record_weeks', weeksSurvived());
+    let rec = localStorage.getItem('editorial_record');
+    if(!rec || state.stats.daysSurvived > parseInt(rec)) {
+        localStorage.setItem('editorial_record', state.stats.daysSurvived);
     }
     localStorage.removeItem('editorial_mentira_save'); // Apaga save
 
@@ -910,7 +803,7 @@ function triggerGameOver(title, reason) {
     document.getElementById('info-desc').innerHTML = `
         ${reason}<br><br>
         <b>Estatísticas Finais:</b><br>
-        📅 Semanas Sobrevividas: ${weeksSurvived()}<br>
+        📅 Dias Sobrevividos: ${state.stats.daysSurvived}<br>
         💰 Dinheiro Final: R$ ${Math.floor(state.money)}<br>
         👥 Seguidores: ${formatNumber(state.followers)}<br>
         🚀 Maior Viralização: ${formatNumber(state.stats.maxViral)} views<br>

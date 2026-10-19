@@ -25,29 +25,35 @@
     <!-- TELA DE JOGO -->
     <div id="game-screen" class="screen">
         
-        <div id="game-content">
         <div id="hud">
-            <div class="hud-item money-text"><span class="hud-ic" data-ico="coin"></span><div class="hud-tx"><b id="hud-money">R$ 0</b><small>Dinheiro</small></div></div>
-            <div class="hud-item"><span class="hud-ic" data-ico="calendar"></span><div class="hud-tx"><b>Semana <span id="hud-day">1</span></b><small>Semana atual</small></div></div>
-            <div class="hud-item action-text"><span class="hud-ic" data-ico="bolt"></span><div class="hud-tx"><b>Ações: <span id="hud-actions">3/3</span></b><small>Ações disponíveis</small></div></div>
-            <div class="hud-item followers-text"><span class="hud-ic" data-ico="users"></span><div class="hud-tx"><b id="hud-followers">0</b><small>Seguidores</small></div></div>
-            <div class="hud-item"><span class="hud-ic" data-ico="star"></span><div class="hud-tx"><b>Reputação: <span id="hud-rep">Alta</span></b><small>Influência na mídia</small></div></div>
-            <div class="police-container" id="police-container"><span class="hud-ic" data-ico="siren"></span><div class="hud-tx"><b>Atenção Policial: <span id="hud-police-val">0%</span></b><div class="police-bar-bg"><div class="police-bar-fill" id="police-bar"></div></div><small id="police-status">Tudo tranquilo</small></div></div>
+            <div class="hud-item money-text">💰 <span id="hud-money">R$ 0</span></div>
+            <div class="hud-item">📅 Dia <span id="hud-day">1</span></div>
+            <div class="hud-item action-text">⚡ Ações: <span id="hud-actions">3/3</span></div>
+            <div class="hud-item followers-text">👥 <span id="hud-followers">0</span></div>
+            <div class="hud-item">⭐ Reputação: <span id="hud-rep">Alta</span></div>
+            
+            <div class="police-container" id="police-container">
+                <div class="hud-item">🚨 Atenção Policial: <span id="hud-police-val">0%</span></div>
+                <div class="police-bar-bg">
+                    <div class="police-bar-fill" id="police-bar"></div>
+                </div>
+                <div class="police-status" id="police-status">Tudo tranquilo</div>
+            </div>
         </div>
 
-                    
+        <div id="game-content">
+            
             <!-- COLUNA ESQUERDA -->
             <div class="left-panel">
                 <div class="house-card polaroid">
                     <div class="tape"></div>
                     <div class="house-img" id="house-image"><div id="viatura">🚓</div></div>
                     <h3 id="house-name">Barraco</h3>
-                    <div class="house-dots" id="house-dots" title="Nível da casa (1 a 10)"></div>
                     <button class="btn-upgrade" id="btn-upgrade-house" onclick="upgradeHouse()">Melhorar Casa</button>
                     <div class="house-prog"><div id="house-prog-fill"></div></div><div id="house-prog-txt"></div>
                 </div>
 
-                <div class="cop-card"><div class="cop-face" id="cop-face"><span data-ico="cop"></span></div><div class="cop-info"><b>Delegado Amaral</b><div id="cop-clues">⚪⚪⚪</div><div id="cop-quote"></div></div></div>
+                <div class="cop-card"><div class="cop-face" id="cop-face">🕵️</div><div><b>Delegado Amaral</b><div id="cop-clues">⚪⚪⚪</div><div id="cop-quote"></div></div></div>
 
                 <div class="bills-card">
                     <h3>Contas Ativas</h3>
@@ -56,35 +62,35 @@
                     </div>
                 </div>
 
-                <button class="btn-action btn-end-day" onclick="endWeek()"><span class="btn-ic" data-ico="doc"></span>Encerrar Semana (+7 dias)</button>
+                <button class="btn-action btn-lay-low" onclick="actionLayLow()">🫥 Ficar na Miúda (-1 Ação)</button>
+                <button class="btn-action btn-end-day" onclick="endDay()">🌙 Encerrar Dia</button>
             </div>
 
             <!-- COLUNA CENTRAL -->
             <div class="center-panel">
-        <div class="newspaper" id="newspaper-bg" ondragover="event.preventDefault()" ondrop="dropSticker(event)">
+                <div class="newspaper" id="newspaper-bg" ondragover="event.preventDefault()" ondrop="dropSticker(event)">
                     <div class="combo-alert" id="combo-alert">💥 COMBO: ABSURDO!</div>
                     <div class="paper-meta"><span id="paper-ed">Edição nº 1</span><span>R$ 2,00</span></div>
-                    <div class="newspaper-header">GAZETA DA MANHÃ<small>INFORMAÇÃO É PODER</small></div>
+                    <div class="newspaper-header">GAZETA DA MANHÃ</div>
                     <div class="headline" id="headline-text">Carregando notícia...</div>
-                    <div class="paper-body"><div class="photo" id="news-photo">📰</div><div class="cols"></div><div class="paper-side"><b>Outras notícias da cidade</b><ul><li>Comércio local celebra aumento nas vendas.</li><li>Nova linha de ônibus deve ser lançada.</li><li>Polícia reforça o patrulhamento.</li></ul></div></div>
-                    <div class="paper-foot"><span>📰 Jornalismo independente, direto da comunidade.</span><span>Edição de hoje</span></div>
+                    <div class="paper-body"><div class="photo" id="news-photo">📰</div><div class="cols"></div></div>
                     <div id="stamps"></div>
                 </div>
 
                 <div class="slots" id="slots"></div>
-                <div id="narrator"><span class="n-ic" data-ico="narr"></span><span id="narr-txt"></span></div>
+                <div id="narrator">🎙️ <span id="narr-txt"></span></div>
 
                 <div class="editor-stats">
-                    <div class="stat-box"><span class="ic" data-ico="coin"></span><span>Lucro Base Est.: <span style="color:var(--green)">R$ <span id="est-profit">0</span></span></span></div>
-                    <div class="stat-box"><span class="ic" data-ico="warn"></span><span>Risco Adicionado: <span style="color:var(--red)">+<span id="est-risk">0</span>%</span></span></div>
-                    <div class="stat-box"><span class="ic" data-ico="chart"></span><span>Potencial Viral: <span style="color:var(--yellow)"><span id="est-viral">Baixo</span></span></span></div>
+                    <div>Lucro Base Est.: <span style="color:var(--green)">R$ <span id="est-profit">0</span></span></div>
+                    <div>Risco Adicionado: <span style="color:var(--red)">+<span id="est-risk">0</span>%</span></div>
+                    <div>Potencial Viral: <span style="color:var(--yellow)"><span id="est-viral">Baixo</span></span></div>
                 </div>
 
-                <button class="btn-publish" id="btn-publish" onclick="startBet()"><span class="btn-ic" data-ico="doc"></span>PUBLICAR MANCHETE (-1 Ação)</button>
-                <button class="btn-cancel" id="btn-cancel" onclick="cancelHeadline()"><span class="btn-ic" data-ico="cancelx"></span>CANCELAR MANCHETE</button>
+                <button class="btn-publish" id="btn-publish" onclick="startBet()">🖨️ PUBLICAR MANCHETE (-1 Ação)</button>
+                <button class="btn-cancel" id="btn-cancel" onclick="cancelHeadline()">❌ CANCELAR MANCHETE</button>
 
                 <div class="viral-feed">
-                    <h3 style="color: var(--pink); border-bottom: 1px solid #444; padding-bottom:5px; margin-bottom:10px;"><span class="btn-ic" data-ico="pflame"></span>Publicações Ativas</h3>
+                    <h3 style="color: var(--pink); border-bottom: 1px solid #444; padding-bottom:5px; margin-bottom:10px;">🔥 Publicações Ativas</h3>
                     <div id="viral-list">
                         <div style="color: #666; font-style: italic;">Nenhuma publicação viralizando no momento.</div>
                     </div>
@@ -93,14 +99,13 @@
 
             <!-- COLUNA DIREITA -->
             <div class="right-panel">
-                <div class="upgrades-panel"><h3>🛠️ Upgrades</h3><div id="upgrades-container"></div></div>
-                <button class="btn-action btn-lay-low" onclick="actionLayLow()"><span class="btn-ic" data-ico="person"></span>Ação Discreta (-1 Ação)</button>
                 <div class="sticker-panel">
                     <h3>Adesivos de Edição</h3>
                     <div style="font-size:.75rem;color:#aab;margin-bottom:8px">Arraste para o jornal (ou clique). Clique no carimbo para descolar.</div>
                     <div id="stickers-container">
                         <!-- Preenchido via JS -->
                     </div>
+                    <button class="btn-action" style="width: 100%; margin-top: 10px;" onclick="generateBaseNews()">🎲 Sortear Manchete</button>
                 </div>
             </div>
 
