@@ -127,3 +127,100 @@
 .btn-cancel:hover { transform: translateY(2px); box-shadow: 0 2px 0 #a80000; }
 .btn-cancel:active { transform: translateY(4px); box-shadow: 0 0 0; }
 .btn-cancel:disabled { opacity: .4; cursor: default; }
+
+/* ================= LAYOUT FIXO (100vh) + 3 COLUNAS COM SCROLL ================= */
+
+/* 1. Trava a janela: sem scroll geral */
+html, body {
+    height: 100%;
+    height: 100dvh;
+    overflow: hidden;
+}
+
+/* A tela de jogo ocupa exatamente a janela, em coluna: HUD em cima, colunas embaixo */
+#game-screen {
+    height: 100vh;
+    height: 100dvh;
+    min-height: 0;
+    padding: 12px 20px 16px;
+    overflow: hidden;
+}
+#game-screen.active { display: flex; }
+
+/* Menu inicial: se a janela for muito baixa, rola só ele */
+#start-screen { height: 100dvh; overflow-y: auto; }
+
+/* HUD mantém o tamanho natural */
+#hud {
+    flex: 0 0 auto;
+    margin-bottom: 12px;
+}
+
+/* 2. Área principal usa todo o espaço restante, sem estourar */
+#game-content {
+    flex: 1 1 0;
+    min-height: 0;                                  /* essencial para o grid/flex poder encolher */
+    grid-template-columns: 250px minmax(0, 1fr) 300px;
+    grid-template-rows: minmax(0, 1fr);             /* a linha não passa da altura disponível */
+    overflow: hidden;
+}
+
+/* Cada coluna rola sozinha */
+.left-panel,
+.center-panel,
+.right-panel {
+    min-height: 0;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 14px 8px 8px 8px;   /* respiro p/ fita da polaroid, rotações e a barra de rolagem */
+    scrollbar-width: thin;
+    scrollbar-color: var(--pink) #1f1f2b;
+}
+
+/* Filhos não são espremidos: o conteúdo rola em vez de encolher */
+.left-panel > *,
+.center-panel > *,
+.right-panel > * { flex-shrink: 0; }
+
+/* O feed viral não precisa de scroll próprio dentro da coluna que já rola */
+.viral-feed { max-height: none; overflow: visible; }
+
+/* O painel de adesivos deixa a coluna da direita fazer o scroll */
+.sticker-panel { height: auto; overflow: visible; }
+
+/* Barra de rolagem personalizada (Chrome, Edge, Safari) */
+.left-panel::-webkit-scrollbar,
+.center-panel::-webkit-scrollbar,
+.right-panel::-webkit-scrollbar { width: 8px; }
+
+.left-panel::-webkit-scrollbar-track,
+.center-panel::-webkit-scrollbar-track,
+.right-panel::-webkit-scrollbar-track {
+    background: #1f1f2b;
+    border-radius: 10px;
+}
+.left-panel::-webkit-scrollbar-thumb,
+.center-panel::-webkit-scrollbar-thumb,
+.right-panel::-webkit-scrollbar-thumb {
+    background: var(--pink);
+    border-radius: 10px;
+    border: 2px solid #1f1f2b;
+}
+.left-panel::-webkit-scrollbar-thumb:hover,
+.center-panel::-webkit-scrollbar-thumb:hover,
+.right-panel::-webkit-scrollbar-thumb:hover { background: var(--purple); }
+
+/* Telas estreitas: colunas empilhadas; a área do jogo rola como um bloco só */
+@media (max-width: 900px) {
+    #game-content {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: none;
+        overflow-y: auto;
+    }
+    .left-panel, .center-panel, .right-panel {
+        height: auto;
+        overflow: visible;
+    }
+    #hud { max-height: 35dvh; overflow-y: auto; }
+}
