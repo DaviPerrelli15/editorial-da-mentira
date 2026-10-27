@@ -96,7 +96,7 @@ let state = {
     bills: [
         { id: "rent", name: "🏠 Aluguel", cost: 50, daysLeft: 5, freq: 5, strikes: 0 },
         { id: "internet", name: "📱 Internet", cost: 30, daysLeft: 3, freq: 3, strikes: 0 },
-        { id: "food", name: "🍔 Comida", cost: 15, daysLeft: 1, freq: 1, strikes: 0 }
+        { id: "food", name: "🛒 Compras", cost: 15, daysLeft: 1, freq: 1, strikes: 0 }
     ],
     activePosts: [], // { id, text, views, profit, risk, viralPower, day, factChecked }
     history: []
@@ -125,7 +125,7 @@ function startGame() {
         bills: [
             { id: "rent", name: "🏠 Aluguel", cost: HOUSES[0].rent, daysLeft: 5, freq: 5, strikes: 0 },
             { id: "internet", name: "📱 Internet", cost: 30, daysLeft: 3, freq: 3, strikes: 0 },
-            { id: "food", name: "🍔 Comida", cost: 15, daysLeft: 1, freq: 1, strikes: 0 }
+            { id: "food", name: "🛒 Compras", cost: 15, daysLeft: 1, freq: 1, strikes: 0 }
         ],
         activePosts: [], history: []
     };
