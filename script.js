@@ -76,7 +76,14 @@ const COMBOS = [
         bonusProfit: 60, bonusRisk: 15, multViral: 3.5 
     }
 ];
-
+const BILL_ENDINGS = {
+    rent:     { title: "DESPEJADO",       reason: "Você não pagou o aluguel várias vezes e o proprietário chamou a polícia para te tirar da casa." },
+    water:    { title: "MORREU DE SEDE",  reason: "Sem dinheiro para pagar a água, a conta foi cortada e você acabou desidratando. Fim da linha." },
+    energy:   { title: "MOROU NA RUA",    reason: "Com a luz cortada, não havia como continuar mandando notícias. O negócio faliu e você acabou indo morar na rua." },
+    internet: { title: "MOROU NA RUA",    reason: "Sem internet, não dá para mandar notícias. O site faliu por completa inatividade e você foi morar na rua." },
+    food:     { title: "MORREU DE FOME",  reason: "Você deixou de comprar comida por falta de recursos e acabou enfraquecendo até morrer de fome." }
+};
+const MAX_STRIKES = 2; // atrasos acumulados até o final específico da conta
 /* ================= ESTADO DO JOGO ================= */
 let state = {
     day: 1,
@@ -500,34 +507,36 @@ function endDay() {
     state.actions = state.maxActions;
     state.stats.daysSurvived++;
 
-    // Processar Contas
-    let despejado = false;
+    // Processar Contas (pagamento manual)
+    let fimDeJogo = null;
     state.bills.forEach(b => {
         b.daysLeft--;
-        if(b.daysLeft <= 0) {
-            if(state.money >= b.cost) {
-                changeMoney(-b.cost);
-                b.daysLeft = b.freq;
-                b.strikes = 0; // Pagou, zera strike
-            } else {
-                b.strikes++;
-                if(b.id === 'rent' && b.strikes >= 2) {
-                    despejado = true;
-                }
-            }
+        if(b.daysLeft > 0) return;          // ainda dentro do prazo
+
+        if(b.paid) {
+            // Ciclo pago terminou: a conta reabre e precisa ser paga de novo
+            b.paid = false;
+            b.daysLeft = 1;
+            return;
+        }
+
+        // Prazo acabou sem pagamento: atraso
+        b.daysLeft = 0;
+        b.strikes++;
+        if(b.strikes >= MAX_STRIKES && !fimDeJogo && BILL_ENDINGS[b.id]) {
+            fimDeJogo = BILL_ENDINGS[b.id];
         }
     });
 
-    if(despejado) {
-        triggerGameOver("DESPEJADO", "Você não pagou o aluguel várias vezes e o proprietário chamou a polícia para te tirar da casa.");
+    if(fimDeJogo) {
+        triggerGameOver(fimDeJogo.title, fimDeJogo.reason);
         return;
     }
 
-    if(state.money < -500) {
-        triggerGameOver("FALÊNCIA", "Você acumulou muitas dívidas, agiotas bateram na sua porta. Fim da linha.");
+    if(fimDeJogo) {
+        triggerGameOver(fimDeJogo.title, fimDeJogo.reason);
         return;
     }
-
     // Processar Viralização
     let dailyViralProfit = 0;
     let dailyViralRisk = 0;
@@ -591,16 +600,51 @@ function endDay() {
         resurrectOldPost();
     }
 }
+function payBill(id) {
+    const b = state.bills.find(x => x.id === id);
+    if(!b || b.paid) return;
+
+    if(state.money < b.cost) {
+        soundAlert();
+        floatText('Sem dinheiro!');
+        return;
+    }
+
+    changeMoney(-b.cost);
+    soundMoney();
+    b.paid = true;          // status "Pago"
+    b.strikes = 0;          // zera os atrasos
+    b.daysLeft = b.freq;    // reinicia o ciclo
+    renderBills();
+    saveGame();
+}
 
 function renderBills() {
     let cont = document.getElementById('bills-list');
     cont.innerHTML = "";
     const postitStyles = ['pin', 'clip', 'curl'];
     state.bills.forEach((b, i) => {
+        const late = !b.paid && b.strikes > 0;
         let div = document.createElement('div');
-        div.className = 'bill-item postit postit-' + postitStyles[i % 3] + (b.strikes > 0 ? ' late' : '');
-        let status = b.strikes > 0 ? `<span class="bill-warning">ATRASADA! (${b.strikes})</span>` : `Vence em: ${b.daysLeft}d`;
-        div.innerHTML = `<span class="bill-name">${b.name}</span><span class="bill-cost">R$ ${b.cost}</span><span class="bill-due">${status}</span>`;
+        div.className = 'bill-item postit postit-' + postitStyles[i % 3] + (late ? ' late' : '') + (b.paid ? ' paid' : '');
+
+        let status, btnText;
+        if(b.paid) {
+            status = `<span class="bill-ok">✔ Paga · reabre em ${b.daysLeft}d</span>`;
+            btnText = '✔ Pago';
+        } else if(late) {
+            status = `<span class="bill-warning">ATRASADA! (${b.strikes}/${MAX_STRIKES})</span>`;
+            btnText = 'Pagar atrasada';
+        } else {
+            status = `Vence em: ${b.daysLeft}d`;
+            btnText = 'Pagar';
+        }
+
+        div.innerHTML = `
+            <span class="bill-name">${b.name}</span>
+            <span class="bill-cost">R$ ${b.cost}</span>
+            <span class="bill-due">${status}</span>
+            <button class="bill-pay" ${b.paid ? 'disabled' : ''} onclick="payBill('${b.id}')">${btnText}</button>`;
         cont.appendChild(div);
     });
 }

@@ -93,3 +93,25 @@
 .postit-curl{ padding-bottom:20px; }
 .postit-clip::before{ left:auto; right:26px; margin-left:0; top:-16px; }
 .postit-clip .bill-cost{ margin-right:30px; }
+
+/* ---------- Botão de pagamento nos post-its ---------- */
+.postit .bill-pay{
+  grid-column:1 / -1; margin-top:6px; padding:1px 10px;
+  font:700 1.25rem var(--hand); color:#3a3320; cursor:pointer;
+  background:rgba(255,255,255,.35); border:2px dashed #7a6a30; border-radius:4px;
+  transition:transform .15s, background .15s;
+}
+.postit .bill-pay:hover:not(:disabled){ background:rgba(255,255,255,.7); transform:rotate(-1.2deg); }
+.postit .bill-pay:active:not(:disabled){ transform:scale(.97); }
+
+/* atrasada */
+.postit.late .bill-pay{ color:#c4160f; border-color:#c4160f; background:rgba(255,255,255,.55); }
+
+/* paga */
+.postit.paid{ background:linear-gradient(160deg,#dcf3bd,#c3e692 60%,#aad478); }
+.postit.paid .bill-cost{ color:#2c6b1f; text-decoration:line-through; }
+.postit .bill-ok{ color:#2c6b1f; font-weight:700; }
+.postit .bill-pay:disabled{
+  cursor:default; color:#2c6b1f; background:transparent;
+  border:2px solid #2c6b1f; transform:rotate(-1deg);
+}
