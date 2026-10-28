@@ -262,7 +262,7 @@ let state = {
   maxActions: 3,
   money: 100,
   followers: 10,
-  reputation: 100, // 0 a 100
+  reputation: 35, // 0 a 100
   police: 0, // 0 a 100
   houseLevel: 1,
   stats: {
@@ -341,7 +341,7 @@ function startGame() {
     maxActions: 3,
     money: 100,
     followers: 10,
-    reputation: 100,
+    reputation: 35,
     police: 0,
     houseLevel: 1,
     stats: { daysSurvived: 0, maxViral: 0, totalPubs: 0, closeCalls: 0 },
@@ -632,7 +632,7 @@ function toggleSticker(id) {
 
 function updateEditor() {
   let finalHeadline = currentBaseNews;
-  let fMult = 1 + 2 * Math.log10(state.followers / 10 + 1);
+  let fMult = 1.6 + 0.7 * Math.log10(Math.max(state.followers, 10) / 10);
   let baseProfit =
     (20 + Math.floor(Math.random() * 20)) * fMult * (1 + slotAbs() * 0.1);
 
@@ -744,7 +744,9 @@ function publishNews() {
     id: Date.now(),
     text: document.getElementById("headline-text").innerText,
     views:
-      100 * totalMultViral * (state.followers > 0 ? state.followers * 0.1 : 1),
+      100 *
+      totalMultViral *
+      (state.followers > 0 ? Math.min(state.followers, 2000) * 0.1 : 1),
     profit: profit,
     risk: risk,
     viralPower: totalMultViral + (comboBonus ? 2 : 0),
@@ -759,12 +761,21 @@ function publishNews() {
   changePolice(risk);
 
   // Ganha seguidores (Baseado no risco/viral)
-  let newFolls = Math.floor(
-    (4 + risk * 1.2) *
-      Math.pow(totalMultViral, 0.7) *
-      (1 + state.followers / 100),
+  let brake = Math.max(
+    0,
+    Math.min(1, (MAX_FOLLOWERS - state.followers) / (MAX_FOLLOWERS * 0.1)),
   );
-  state.followers += newFolls;
+  let newFolls = Math.max(
+    1,
+    Math.floor(
+      (1 + risk * 1.2) *
+        Math.pow(totalMultViral, 0.7) *
+        Math.pow(1 + state.followers / 160, 0.5) *
+        repFactor() *
+        brake,
+    ),
+  );
+  state.followers = Math.min(MAX_FOLLOWERS, state.followers + newFolls);
 
   renderActivePosts();
   generateBaseNews();
@@ -823,6 +834,7 @@ function endDay() {
   state.day++;
   state.actions = state.maxActions;
   state.stats.daysSurvived++;
+  if (state.police < 25) state.reputation = Math.min(100, state.reputation + 2);
 
   // Processar Contas (pagamento manual)
   let fimDeJogo = null;
@@ -868,7 +880,7 @@ function endDay() {
       );
       p.views += viewsGain;
 
-      let profitGain = Math.floor((viewsGain / 1000) * 2); // Ex: R$5 a cada 1k views extras
+      let profitGain = Math.min(40, Math.floor((viewsGain / 1000) * 2)); // máx. R$40 por post/semana
       if (profitGain > 0) {
         dailyViralProfit += profitGain;
         p.profit += profitGain;
@@ -900,7 +912,10 @@ function endDay() {
     1.6 * Math.log10(Math.max(state.followers, 10)) +
     state.activePosts.length * 1.0;
   if (state.houseLevel >= 4)
-    state.followers = Math.floor(state.followers * 1.01);
+    state.followers = Math.min(
+      MAX_FOLLOWERS,
+      state.followers + Math.min(300, Math.floor(state.followers * 0.01)),
+    );
   if (dailyViralProfit > 0) changeMoney(dailyViralProfit);
   if (dailyViralRisk > 0) changePolice(dailyViralRisk);
 
@@ -1209,9 +1224,9 @@ function checkGameOver() {
 function triggerPrisonSequence() {
   document.getElementById("event-modal").classList.remove("show");
   let ps = document.getElementById("prison-screen");
+  if (ps.style.display === "flex") return; // já está rodando
   let txt = document.getElementById("prison-text");
   let choices = document.getElementById("prison-choices");
-
   ps.style.display = "flex";
   txt.innerHTML = "";
   choices.style.display = "none";
@@ -1278,4 +1293,12 @@ function triggerGameOver(title, reason) {
   }; // Recarrega a página
 
   document.getElementById("info-modal").classList.add("show");
+}
+
+const MAX_FOLLOWERS = 1000000; // teto de seguidores
+
+function repFactor() {
+  if (state.reputation > 80) return 1.3; // Alta
+  if (state.reputation > 40) return 1.0; // Média
+  return 0.7; // Baixa
 }
