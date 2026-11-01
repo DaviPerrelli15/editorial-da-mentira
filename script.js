@@ -256,6 +256,26 @@ const BILL_ENDINGS = {
 };
 const MAX_STRIKES = 2; // atrasos acumulados até o final específico da conta
 /* ================= ESTADO DO JOGO ================= */
+const BILL_CYCLE = 4; // semanas entre fechamentos
+const BILL_GROWTH = 1.35; // quanto cada casa encarece as contas
+const BILL_EXTRA = { 9: 1.7, 10: 2.7 }; // as 2 últimas casas ficam bem mais caras
+const BILL_RENT_BARRACO = 300; // aluguel só do Barraco
+const BILL_BASE = {
+  rent: 500,
+  internet: 100,
+  food: 100,
+  water: 100,
+  electricity: 100,
+};
+function billMult(level) {
+  return (
+    Math.pow(BILL_GROWTH, Math.min(level, 8) - 1) * (BILL_EXTRA[level] || 1)
+  );
+}
+function billCostFor(id, level) {
+  if (id === "rent" && level === 1) return BILL_RENT_BARRACO;
+  return Math.round((BILL_BASE[id] * billMult(level)) / 10) * 10;
+}
 let state = {
   day: 1,
   actions: 3,
@@ -275,44 +295,40 @@ let state = {
     {
       id: "rent",
       name: "🏠 Aluguel",
-      cost: 50,
-      daysLeft: 5,
-      freq: 5,
+      cost: billCostFor("rent", 1),
       strikes: 0,
+      paid: false,
     },
     {
       id: "internet",
       name: "📱 Internet",
-      cost: 30,
-      daysLeft: 3,
-      freq: 3,
+      cost: billCostFor("internet", 1),
       strikes: 0,
+      paid: false,
     },
     {
       id: "food",
       name: "🛒 Compras",
-      cost: 15,
-      daysLeft: 1,
-      freq: 1,
+      cost: billCostFor("food", 1),
       strikes: 0,
+      paid: false,
     },
     {
       id: "water",
       name: "💧 Água",
-      cost: 25,
-      daysLeft: 1,
-      freq: 5,
+      cost: billCostFor("water", 1),
       strikes: 0,
+      paid: false,
     },
     {
       id: "electricity",
       name: "⚡ Energia",
-      cost: 30,
-      daysLeft: 1,
-      freq: 5,
+      cost: billCostFor("electricity", 1),
       strikes: 0,
+      paid: false,
     },
   ],
+  billsLeft: BILL_CYCLE,
   activePosts: [], // { id, text, views, profit, risk, viralPower, day, factChecked }
   history: [],
 };
@@ -349,44 +365,40 @@ function startGame() {
       {
         id: "rent",
         name: "🏠 Aluguel",
-        cost: HOUSES[0].rent,
-        daysLeft: 5,
-        freq: 5,
+        cost: billCostFor("rent", 1),
         strikes: 0,
+        paid: false,
       },
       {
         id: "internet",
         name: "📱 Internet",
-        cost: 30,
-        daysLeft: 3,
-        freq: 3,
+        cost: billCostFor("internet", 1),
         strikes: 0,
+        paid: false,
       },
       {
         id: "food",
         name: "🛒 Compras",
-        cost: 15,
-        daysLeft: 1,
-        freq: 1,
+        cost: billCostFor("food", 1),
         strikes: 0,
+        paid: false,
       },
       {
         id: "water",
         name: "💧 Água",
-        cost: 25,
-        daysLeft: 1,
-        freq: 5,
+        cost: billCostFor("water", 1),
         strikes: 0,
+        paid: false,
       },
       {
         id: "electricity",
         name: "⚡ Energia",
-        cost: 30,
-        daysLeft: 1,
-        freq: 5,
+        cost: billCostFor("electricity", 1),
         strikes: 0,
+        paid: false,
       },
     ],
+    billsLeft: BILL_CYCLE,
     activePosts: [],
     history: [],
   };
@@ -403,6 +415,7 @@ function loadGame() {
   let saved = localStorage.getItem("editorial_mentira_save");
   if (saved) {
     state = JSON.parse(saved);
+    if (state.billsLeft == null) state.billsLeft = BILL_CYCLE;
     switchScreen("game-screen");
     renderStickers();
     generateBaseNews();
@@ -510,7 +523,7 @@ function updateHUD() {
     document.getElementById("house-prog-fill").style.width =
       Math.max(0, Math.min(100, (state.money / nextHouse.cost) * 100)) + "%";
     document.getElementById("house-prog-txt").innerText =
-      `R$ ${Math.floor(Math.max(0, state.money)).toLocaleString("pt-BR")} / R$ ${nextHouse.cost.toLocaleString("pt-BR")} · aluguel novo: R$ ${nextHouse.rent}/5 semanas`;
+      `R$ ${Math.floor(Math.max(0, state.money)).toLocaleString("pt-BR")} / R$ ${nextHouse.cost.toLocaleString("pt-BR")} · aluguel novo: R$ ${billCostFor("rent", state.houseLevel + 1).toLocaleString("pt-BR")}/mês`;
     upBtn.style.display = "block";
   } else {
     upBtn.style.display = "none";
@@ -814,15 +827,11 @@ function upgradeHouse() {
     hi.classList.add("flash");
     state.maxActions = state.houseLevel >= 7 ? 4 : 3;
 
-    // Atualiza a conta de aluguel
-    let rentBill = state.bills.find((b) => b.id === "rent");
-    rentBill.cost = nextHouse.cost > 0 ? nextHouse.rent : rentBill.cost; // Aumenta o custo
-
     updateHUD();
     renderBills();
     showModal(
       "Casa Nova!",
-      `Você se mudou para: ${nextHouse.name}.<br><br>Vantagem: ${nextHouse.perk}<br><br>Cuidado: O aluguel subiu!`,
+      `Você se mudou para: ${nextHouse.name}.<br><br>Vantagem: ${nextHouse.perk}<br><br>Cuidado: as contas ficam mais caras no próximo fechamento!`,
       [{ text: "Ostentação!", action: closeEventModal }],
     );
   }
@@ -838,25 +847,23 @@ function endDay() {
 
   // Processar Contas (pagamento manual)
   let fimDeJogo = null;
-  state.bills.forEach((b) => {
-    b.daysLeft--;
-    if (b.daysLeft > 0) return; // ainda dentro do prazo
-
-    if (b.paid) {
-      // Ciclo pago terminou: a conta reabre e precisa ser paga de novo
+  state.billsLeft = (state.billsLeft ?? BILL_CYCLE) - 1;
+  if (state.billsLeft <= 0) {
+    state.bills.forEach((b) => {
+      if (!b.paid) {
+        b.strikes++;
+        if (b.strikes >= MAX_STRIKES && !fimDeJogo && BILL_ENDINGS[b.id]) {
+          fimDeJogo = BILL_ENDINGS[b.id];
+        }
+      }
       b.paid = false;
-      b.daysLeft = 1;
-      return;
-    }
-
-    // Prazo acabou sem pagamento: atraso
-    b.daysLeft = 0;
-    b.strikes++;
-    if (b.strikes >= MAX_STRIKES && !fimDeJogo && BILL_ENDINGS[b.id]) {
-      fimDeJogo = BILL_ENDINGS[b.id];
-    }
-  });
-
+      const novo = billCostFor(b.id, state.houseLevel);
+      const ratio = b.base ? b.cost / b.base : 1;
+      b.base = novo;
+      b.cost = Math.round(novo * ratio);
+    });
+    state.billsLeft = BILL_CYCLE;
+  }
   if (fimDeJogo) {
     triggerGameOver(fimDeJogo.title, fimDeJogo.reason);
     return;
@@ -951,7 +958,6 @@ function payBill(id) {
   soundMoney();
   b.paid = true; // status "Pago"
   b.strikes = 0; // zera os atrasos
-  b.daysLeft = b.freq; // reinicia o ciclo
   renderBills();
   saveGame();
 }
@@ -971,13 +977,16 @@ function renderBills() {
 
     let status, btnText;
     if (b.paid) {
-      status = `<span class="bill-ok">✔ Paga · reabre em ${b.daysLeft} sem.</span>`;
+      status = `<span class="bill-ok">✔ Paga · reabre em ${state.billsLeft} sem.</span>`;
       btnText = "✔ Pago";
     } else if (late) {
       status = `<span class="bill-warning">ATRASADA! (${b.strikes}/${MAX_STRIKES})</span>`;
       btnText = "Pagar atrasada";
     } else {
-      status = `Vence em: ${b.daysLeft} sem.`;
+      status =
+        state.billsLeft === 1
+          ? "Vence ESTA semana!"
+          : `Vence em: ${state.billsLeft} sem.`;
       btnText = "Pagar";
     }
 
