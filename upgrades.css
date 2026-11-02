@@ -1,0 +1,203 @@
+/* ===== UPGRADES: painel "Bastidores" (arquivo NOVO, não altera os outros .css) ===== */
+.upg-panel {
+  background: var(--panel-bg);
+  border: 1px solid #3a3a48;
+  border-radius: 12px;
+  padding: 10px;
+  flex-shrink: 0;
+}
+.upg-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 800;
+  color: var(--yellow);
+  margin-bottom: 6px;
+  font-size: 0.95rem;
+}
+.upg-hint {
+  font-weight: 400;
+  font-size: 0.62rem;
+  color: #aab;
+}
+.upg-attrs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  margin-bottom: 6px;
+}
+.upg-at {
+  background: #33334a;
+  border-radius: 6px;
+  padding: 3px 2px;
+  text-align: center;
+  line-height: 1.2;
+}
+.upg-at b {
+  display: block;
+  font-size: 0.62rem;
+  color: #fff;
+}
+.upg-at small {
+  color: #a5a5b5;
+  font-size: 0.55rem;
+}
+.upg-chips {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin-bottom: 6px;
+}
+.upg-chips::-webkit-scrollbar {
+  display: none;
+}
+.upg-chip {
+  flex: none;
+  background: #33334a;
+  color: #fff;
+  border: 1px solid #555;
+  border-radius: 99px;
+  padding: 2px 9px;
+  font-size: 0.68rem;
+  cursor: pointer;
+}
+.upg-chip.on {
+  background: var(--pink);
+  border-color: var(--pink);
+  color: #000;
+  font-weight: 700;
+}
+.upg-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+#upg-prev,
+#upg-next {
+  flex: none;
+  width: 26px;
+  height: 78px;
+  border: 1px solid #555;
+  background: #33334a;
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0;
+}
+#upg-prev:hover:not(:disabled),
+#upg-next:hover:not(:disabled) {
+  background: var(--pink);
+  color: #000;
+}
+#upg-prev:disabled,
+#upg-next:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+#upg-track {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  flex: 1;
+  min-width: 0;
+}
+#upg-track::-webkit-scrollbar {
+  display: none;
+}
+.upg-card {
+  flex: none;
+  width: 84px;
+  height: 78px;
+  scroll-snap-align: start;
+  background: #33334a;
+  border: 2px solid #555;
+  border-radius: 10px;
+  padding: 4px 3px;
+  text-align: center;
+  cursor: pointer;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  font-family: inherit;
+  transition:
+    transform 0.12s,
+    border-color 0.12s;
+}
+.upg-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--pink);
+}
+.upg-e {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+.upg-card b {
+  font-size: 0.6rem;
+  line-height: 1.1;
+  max-height: 2.2em;
+  overflow: hidden;
+}
+.upg-pips {
+  font-size: 0.5rem;
+  letter-spacing: 1px;
+  color: #ffd23f;
+}
+.upg-p {
+  font-size: 0.64rem;
+  color: #7dff9a;
+  font-weight: 700;
+}
+.upg-card.can {
+  border-color: var(--green);
+  box-shadow: 0 0 8px rgba(77, 255, 77, 0.35);
+  animation: upgpulse 1.6s infinite;
+}
+.upg-card.lock {
+  opacity: 0.5;
+}
+.upg-card.lock .upg-p {
+  color: #ffb4b4;
+}
+.upg-card.max {
+  border-color: #ffd23f;
+}
+.upg-card.max .upg-p {
+  color: #ffd23f;
+}
+@keyframes upgpulse {
+  50% {
+    box-shadow: 0 0 14px rgba(77, 255, 77, 0.6);
+  }
+}
+#upg-tip {
+  margin-top: 6px;
+  min-height: 5.5em;
+  max-height: 10em;
+  overflow-y: auto;
+  font-size: 0.7rem;
+  background: #2b2b3a;
+  border-left: 3px solid var(--yellow);
+  border-radius: 6px;
+  padding: 6px 8px;
+  line-height: 1.35;
+}
+#upg-tip b {
+  color: #fff;
+}
+.upg-mut {
+  color: #a5a5b5;
+}
+.upg-bad {
+  color: #ff8a8a;
+}
+@media (prefers-reduced-motion: reduce) {
+  .upg-card.can {
+    animation: none;
+  }
+}

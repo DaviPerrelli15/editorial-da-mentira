@@ -12,6 +12,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="vintage.css" />
+    <link rel="stylesheet" href="upgrades.css" />
   </head>
   <body>
     <!-- TELA INICIAL -->
@@ -97,13 +98,6 @@
               <!-- Preenchido via JS -->
             </div>
           </div>
-
-          <button class="btn-action btn-lay-low" onclick="actionLayLow()">
-            🫥 Ficar na Miúda (-1 Ação)
-          </button>
-          <button class="btn-action btn-end-day" onclick="endDay()">
-            🌙 Encerrar Semana
-          </button>
         </div>
 
         <!-- COLUNA CENTRAL -->
@@ -179,6 +173,29 @@
 
         <!-- COLUNA DIREITA -->
         <div class="right-panel">
+          <!-- UPGRADES (painel Bastidores) -->
+          <div class="upg-panel" id="upg-panel">
+            <div class="upg-head">
+              <span>🛠️ UPGRADES</span>
+              <span class="upg-hint">Passe o mouse para ver +</span>
+            </div>
+            <div class="upg-attrs" id="upg-attrs"></div>
+            <div class="upg-chips" id="upg-chips"></div>
+            <div class="upg-row">
+              <button id="upg-prev" aria-label="Anterior">◀</button>
+              <div id="upg-track"></div>
+              <button id="upg-next" aria-label="Próximo">▶</button>
+            </div>
+            <div id="upg-tip">
+              Passe o mouse (ou toque) em um cartão para ver o efeito.
+            </div>
+          </div>
+          <button class="btn-action btn-lay-low" onclick="actionLayLow()">
+            🫥 Ficar na Miúda (-1 Ação)
+          </button>
+          <button class="btn-action btn-end-day" onclick="endDay()">
+            🌙 Encerrar Semana
+          </button>
           <div class="sticker-panel">
             <h3>Adesivos de Edição</h3>
             <div style="font-size: 0.75rem; color: #aab; margin-bottom: 8px">
@@ -264,5 +281,6 @@
 
     <script src="script.js"></script>
     <script src="extras.js"></script>
+    <script src="upgrades-mini.js"></script>
   </body>
 </html>
