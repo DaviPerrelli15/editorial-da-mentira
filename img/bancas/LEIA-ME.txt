@@ -1,0 +1,17 @@
+Imagens das bancas de jornal (Miguel)
+=====================================
+
+Coloque aqui as 10 imagens das bancas, uma por nível:
+
+  banca1.webp, banca2.webp, ..., banca10.webp
+
+Formato sugerido: 4:3 (ex.: 800x600), WebP ou JPG.
+Se usar outro nome ou extensão, ajuste a lista "bancas" em js/assets.js.
+
+Para ativar, abra js/assets.js e troque:
+  propertyTheme: "casas"
+por:
+  propertyTheme: "bancas"
+
+Nomes dos níveis, rótulos ("Banca") e textos da tela mudam juntos.
+Enquanto alguma imagem faltar, o jogo mostra uma ilustração reserva.

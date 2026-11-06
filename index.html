@@ -2,285 +2,319 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>O Editorial da Mentira - Sobrevivência</title>
-    <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="extras.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0d1120" />
+    <meta name="description" content="Editorial da Mentira: jogo de navegador em que você edita manchetes sensacionalistas para pagar as contas sem ser preso." />
+    <title>Editorial da Mentira</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%23b3121b'/%3E%3Cpath d='M6 6h9v12H7a1 1 0 0 1-1-1V6Zm9 3h3v8a1 1 0 0 1-2 0' fill='%23f3ead3'/%3E%3Cpath d='M8 9h5M8 12h5M8 15h3' stroke='%23b3121b' stroke-width='1.4'/%3E%3C/svg%3E" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&display=swap"
       rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&family=Caveat:wght@500;700&family=Playfair+Display:wght@700;900&family=UnifrakturMaguntia&display=swap"
     />
-    <link rel="stylesheet" href="vintage.css" />
-    <link rel="stylesheet" href="upgrades.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/overlays.css" />
   </head>
   <body>
-    <!-- TELA INICIAL -->
-    <div id="start-screen" class="screen active">
-      <h1>📰 O EDITORIAL DA MENTIRA</h1>
-      <p>Sobreviva editando manchetes. O quão longe você vai por cliques?</p>
-      <button class="menu-btn" onclick="startGame()">NOVO JOGO</button>
-      <button
-        class="menu-btn"
-        id="btn-continue"
-        style="display: none"
-        onclick="loadGame()"
-      >
-        CONTINUAR
-      </button>
-      <button class="menu-btn" onclick="showRules()">COMO JOGAR</button>
-      <div
-        id="high-score-display"
-        style="margin-top: 20px; color: var(--green)"
-      >
-        Recorde: Nenhum
+    <!-- ================= TELA INICIAL ================= -->
+    <section id="screen-start" class="screen screen--start is-active" aria-labelledby="start-title">
+      <div class="start">
+        <p class="start__kicker">Edição extra · Semana 1</p>
+        <h1 id="start-title" class="start__title">O Editorial da Mentira</h1>
+        <p class="start__tagline">Sobreviva editando manchetes. Até onde você vai por cliques?</p>
+        <div class="start__actions">
+          <button type="button" id="btn-new" class="btn btn--primary btn--lg" data-icon="play">Novo jogo</button>
+          <button type="button" id="btn-continue" class="btn btn--secondary btn--lg" data-icon="newspaper" hidden>Continuar</button>
+          <button type="button" id="btn-rules" class="btn btn--ghost" data-icon="help">Como jogar</button>
+        </div>
+        <p id="start-record" class="start__record">Recorde: nenhum ainda</p>
+        <p class="start__credits">Um jogo de Davi Perrelli, Carlos Henrique e Miguel Arthur</p>
       </div>
-    </div>
+    </section>
 
-    <!-- TELA DE JOGO -->
-    <div id="game-screen" class="screen">
-      <div id="hud">
-        <div class="hud-item money-text">
-          💰 <span id="hud-money">R$ 0</span>
-        </div>
-        <div class="hud-item">📅 Semana <span id="hud-day">1</span></div>
-        <div class="hud-item action-text">
-          ⚡ Ações: <span id="hud-actions">3/3</span>
-        </div>
-        <div class="hud-item followers-text">
-          👥 <span id="hud-followers">0</span>
-        </div>
-        <div class="hud-item">⭐ Reputação: <span id="hud-rep">Alta</span></div>
-
-        <div class="police-container" id="police-container">
-          <div class="hud-item">
-            🚨 Atenção Policial: <span id="hud-police-val">0%</span>
+    <!-- ================= TELA DE JOGO ================= -->
+    <section id="screen-game" class="screen screen--game" data-tab="redacao" aria-label="Redação da Gazeta">
+      <!-- Barra de status (Estilo 1 e 7) -->
+      <header class="hud">
+        <div class="hud__stats" role="group" aria-label="Status do jornal">
+          <div class="stat stat--money" title="Dinheiro em caixa">
+            <span class="stat__icon" data-icon="money"></span>
+            <span class="stat__value" id="hud-money">R$ 0</span>
           </div>
-          <div class="police-bar-bg">
-            <div class="police-bar-fill" id="police-bar"></div>
+          <div class="stat stat--week" title="Semana atual">
+            <span class="stat__icon" data-icon="calendar"></span>
+            <span class="stat__label">Semana</span>
+            <span class="stat__value" id="hud-week">1</span>
           </div>
-          <div class="police-status" id="police-status">Tudo tranquilo</div>
+          <div class="stat stat--actions" title="Ações restantes nesta semana">
+            <span class="stat__icon" data-icon="bolt"></span>
+            <span class="stat__label">Ações:</span>
+            <span class="stat__value" id="hud-actions">3/3</span>
+          </div>
+          <button type="button" class="stat stat--followers" id="hud-followers-btn" aria-describedby="hud-followers-hint">
+            <span class="stat__icon" data-icon="user"></span>
+            <span class="stat__value" id="hud-followers">0</span>
+            <span class="visually-hidden" id="hud-followers-hint">seguidores. Toque para ver o cálculo.</span>
+          </button>
+          <button type="button" class="stat stat--rep" id="hud-rep-btn" aria-describedby="hud-rep-hint">
+            <span class="stat__icon" data-icon="star"></span>
+            <span class="stat__label">Reputação:</span>
+            <span class="stat__value" id="hud-rep">Baixa</span>
+            <span class="stat__warn" id="hud-rep-warn" data-icon="warning"></span>
+            <span class="visually-hidden" id="hud-rep-hint">Toque para ver como a reputação afeta views e seguidores.</span>
+          </button>
         </div>
-      </div>
+        <div class="hud__police" id="hud-police" role="group" aria-label="Atenção policial">
+          <div class="police__top">
+            <span class="police__icon" data-icon="siren"></span>
+            <span>Atenção Policial:</span>
+            <b id="hud-police-val">0%</b>
+          </div>
+          <div class="police__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="police-bar">
+            <div class="police__fill" id="police-fill"></div>
+          </div>
+          <div class="police__status" id="police-status">Tranquilo</div>
+        </div>
+        <button type="button" class="hud__menu btn btn--icon" id="btn-menu" aria-label="Menu" data-icon="menu"></button>
+      </header>
 
-      <div id="game-content">
-        <!-- COLUNA ESQUERDA -->
-        <div class="left-panel">
-          <div class="house-card polaroid">
-            <div class="tape"></div>
-            <div class="house-img" id="house-image">
-              <div id="viatura">🚓</div>
+      <main class="desk">
+        <!-- ===== COLUNA ESQUERDA: imóvel, delegado, contas ===== -->
+        <section class="col col--left" id="col-left" aria-label="Casa, delegado e contas" tabindex="-1">
+          <article class="property" id="property">
+            <span class="property__tape" aria-hidden="true"></span>
+            <div class="property__photo" id="property-photo">
+              <img id="property-img" alt="" />
+              <div class="property__fallback" id="property-fallback" hidden></div>
+              <div class="property__car" id="property-car" aria-hidden="true"></div>
             </div>
-            <h3 id="house-name">Barraco</h3>
-            <button
-              class="btn-upgrade"
-              id="btn-upgrade-house"
-              onclick="upgradeHouse()"
-            >
-              Melhorar Casa
+            <h2 class="property__name" id="property-name">Barraco</h2>
+            <p class="property__perk" id="property-perk"></p>
+            <div class="progress" aria-hidden="true"><div class="progress__fill" id="property-progress"></div></div>
+            <p class="property__next" id="property-next"></p>
+            <button type="button" class="btn btn--hand" id="btn-property">Melhorar</button>
+          </article>
+
+          <article class="delegado" id="delegado" aria-live="polite">
+            <div class="delegado__portrait" id="delegado-portrait"></div>
+            <div class="delegado__info">
+              <h2 class="delegado__name">Delegado Amaral</h2>
+              <div class="delegado__clues" id="delegado-clues"></div>
+              <p class="delegado__quote" id="delegado-quote"></p>
+              <p class="delegado__effect" id="delegado-effect"></p>
+            </div>
+          </article>
+
+          <section class="bills" aria-labelledby="bills-title">
+            <h2 class="bills__title" id="bills-title">Contas do mês</h2>
+            <p class="bills__month" id="bills-month"></p>
+            <div class="bills__list" id="bills-list"></div>
+          </section>
+        </section>
+
+        <!-- ===== COLUNA CENTRAL: redação ===== -->
+        <section class="col col--center" id="col-center" aria-label="Redação" tabindex="-1">
+          <article class="paper" id="paper" aria-label="Primeira página da Gazeta">
+            <div class="paper__meta">
+              <span id="paper-edition">Edição nº 1</span>
+              <span id="paper-week">Semana 1</span>
+              <span>R$ 2,00</span>
+            </div>
+            <p class="paper__masthead">Gazeta da Manhã</p>
+            <p class="paper__headline" id="headline" aria-live="polite"></p>
+            <div class="paper__body">
+              <figure class="paper__photo" id="photo">
+                <div class="paper__art" id="photo-art"></div>
+                <figcaption id="photo-caption">Foto: arquivo</figcaption>
+              </figure>
+              <div class="paper__cols" aria-hidden="true"></div>
+            </div>
+            <div class="paper__stamps" id="stamps"></div>
+            <p class="paper__combo" id="combo" hidden></p>
+            <p class="paper__drop" aria-hidden="true">Solte o adesivo aqui</p>
+          </article>
+
+          <div class="builder" role="group" aria-label="Montar a manchete">
+            <button type="button" class="slot" data-slot="0"></button>
+            <button type="button" class="slot" data-slot="1"></button>
+            <button type="button" class="slot" data-slot="2"></button>
+            <button type="button" class="btn btn--icon builder__dice" id="btn-shuffle" aria-label="Sortear manchete" title="Sortear manchete" data-icon="dice"></button>
+          </div>
+
+          <dl class="forecast" id="forecast" aria-label="Previsão da publicação"></dl>
+
+          <div class="turn">
+            <button type="button" class="btn btn--publish" id="btn-publish" data-icon="print">
+              Publicar manchete <small>−1 ação</small>
             </button>
-            <div class="house-prog"><div id="house-prog-fill"></div></div>
-            <div id="house-prog-txt"></div>
-          </div>
-
-          <div class="cop-card">
-            <div class="cop-face" id="cop-face">🕵️</div>
-            <div>
-              <b>Delegado Amaral</b>
-              <div id="cop-clues">⚪⚪⚪</div>
-              <div id="cop-quote"></div>
+            <div class="turn__row">
+              <button type="button" class="btn btn--action" id="btn-laylow" data-icon="incognito">Ficar na Miúda <small>−1 ação</small></button>
+              <button type="button" class="btn btn--action" id="btn-shred" data-icon="shredder">Queima de Arquivo <small id="shred-note">−1 ação</small></button>
+              <button type="button" class="btn btn--end" id="btn-endweek" data-icon="moon">Encerrar semana</button>
             </div>
           </div>
 
-          <div class="bills-card">
-            <h3>Contas Ativas</h3>
-            <div id="bills-list">
-              <!-- Preenchido via JS -->
-            </div>
-          </div>
-        </div>
+          <p class="narrator" aria-live="polite"><span class="narrator__icon" data-icon="mic"></span><span id="narrator-text"></span></p>
 
-        <!-- COLUNA CENTRAL -->
-        <div class="center-panel">
-          <div
-            class="newspaper"
-            id="newspaper-bg"
-            ondragover="event.preventDefault()"
-            ondrop="dropSticker(event)"
-          >
-            <div class="combo-alert" id="combo-alert">💥 COMBO: ABSURDO!</div>
-            <div class="paper-meta">
-              <span id="paper-ed">Edição nº 1</span><span>R$ 2,00</span>
-            </div>
-            <div class="newspaper-header">GAZETA DA MANHÃ</div>
-            <div class="headline" id="headline-text">Carregando notícia...</div>
-            <div class="paper-body">
-              <div class="photo" id="news-photo">📰</div>
-              <div class="cols"></div>
-            </div>
-            <div id="stamps"></div>
-          </div>
+          <section class="feed" aria-labelledby="feed-title">
+            <h2 class="feed__title" id="feed-title"><span data-icon="flame"></span> Publicações no ar</h2>
+            <ol class="feed__list" id="feed-list"></ol>
+          </section>
+        </section>
 
-          <div class="slots" id="slots"></div>
-          <div id="narrator">🎙️ <span id="narr-txt"></span></div>
+        <!-- ===== COLUNA DIREITA: adesivos e bastidores ===== -->
+        <section class="col col--right" id="col-right" aria-label="Adesivos e bastidores" tabindex="-1">
+          <section class="panel panel--stickers" id="panel-stickers" aria-labelledby="stickers-title">
+            <div class="mini-preview" id="mini-preview" aria-hidden="true"></div>
+            <header class="panel__head">
+              <h2 id="stickers-title"><span data-icon="sticker"></span> Adesivos de edição</h2>
+              <span class="counter" id="sticker-count">0/3</span>
+            </header>
+            <p class="panel__hint">Clique para colar no jornal (ou arraste até ele). Clique de novo para descolar.</p>
+            <div class="sticker-list" id="sticker-list"></div>
+            <button type="button" class="btn btn--ghost btn--sm" id="btn-clear-stickers" data-icon="close">Descolar todos</button>
+          </section>
 
-          <div class="editor-stats">
-            <div>
-              Lucro Base Est.:
-              <span style="color: var(--green)"
-                >R$ <span id="est-profit">0</span></span
-              >
-            </div>
-            <div>
-              Risco Adicionado:
-              <span style="color: var(--red)"
-                >+<span id="est-risk">0</span>%</span
-              >
-            </div>
-            <div>
-              Potencial Viral:
-              <span style="color: var(--yellow)"
-                ><span id="est-viral">Baixo</span></span
-              >
-            </div>
-          </div>
+          <section class="panel panel--upgrades" id="panel-upgrades" aria-labelledby="upgrades-title">
+            <header class="panel__head">
+              <h2 id="upgrades-title"><span data-icon="tools"></span> Bastidores</h2>
+              <span class="counter" id="payroll">Folha: R$ 0/sem</span>
+            </header>
+            <div class="upg-summary" id="upg-summary"></div>
+            <div class="chips" id="upg-filters" role="group" aria-label="Filtrar upgrades"></div>
+            <ul class="upg-list" id="upg-list"></ul>
+          </section>
+        </section>
+      </main>
 
-          <button class="btn-publish" id="btn-publish" onclick="startBet()">
-            🖨️ PUBLICAR MANCHETE (-1 Ação)
-          </button>
-          <button class="btn-cancel" id="btn-cancel" onclick="cancelHeadline()">
-            ❌ CANCELAR MANCHETE
-          </button>
+      <!-- Navegação do celular (abas) -->
+      <nav class="tabbar" aria-label="Seções do jogo">
+        <button type="button" class="tab" data-tab="redacao" data-icon="newspaper" aria-current="page">Redação</button>
+        <button type="button" class="tab" data-tab="adesivos" data-icon="sticker">Adesivos<span class="tab__badge" id="badge-adesivos" hidden></span></button>
+        <button type="button" class="tab" data-tab="contas" data-icon="receipt">Contas<span class="tab__badge" id="badge-contas" hidden></span></button>
+        <button type="button" class="tab" data-tab="bastidores" data-icon="tools">Bastidores<span class="tab__badge" id="badge-bastidores" hidden></span></button>
+      </nav>
+    </section>
 
-          <div class="viral-feed">
-            <h3
-              style="
-                color: var(--pink);
-                border-bottom: 1px solid #444;
-                padding-bottom: 5px;
-                margin-bottom: 10px;
-              "
-            >
-              🔥 Publicações Ativas
-            </h3>
-            <div id="viral-list">
-              <div style="color: #666; font-style: italic">
-                Nenhuma publicação viralizando no momento.
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- COLUNA DIREITA -->
-        <div class="right-panel">
-          <!-- UPGRADES (painel Bastidores) -->
-          <div class="upg-panel" id="upg-panel">
-            <div class="upg-head">
-              <span>🛠️ UPGRADES</span>
-              <span class="upg-hint">Passe o mouse para ver +</span>
-            </div>
-            <div class="upg-attrs" id="upg-attrs"></div>
-            <div class="upg-chips" id="upg-chips"></div>
-            <div class="upg-row">
-              <button id="upg-prev" aria-label="Anterior">◀</button>
-              <div id="upg-track"></div>
-              <button id="upg-next" aria-label="Próximo">▶</button>
-            </div>
-            <div id="upg-tip">
-              Passe o mouse (ou toque) em um cartão para ver o efeito.
-            </div>
-          </div>
-          <button class="btn-action btn-lay-low" onclick="actionLayLow()">
-            🫥 Ficar na Miúda (-1 Ação)
-          </button>
-          <button class="btn-action btn-end-day" onclick="endDay()">
-            🌙 Encerrar Semana
-          </button>
-          <div class="sticker-panel">
-            <h3>Adesivos de Edição</h3>
-            <div style="font-size: 0.75rem; color: #aab; margin-bottom: 8px">
-              Arraste para o jornal (ou clique). Clique no carimbo para
-              descolar.
-            </div>
-            <div id="stickers-container">
-              <!-- Preenchido via JS -->
-            </div>
-            <button
-              class="btn-action"
-              style="width: 100%; margin-top: 10px"
-              onclick="generateBaseNews()"
-            >
-              🎲 Sortear Manchete
-            </button>
-          </div>
-        </div>
+    <!-- ================= SOBREPOSIÇÕES ================= -->
+    <div class="overlay" id="modal" hidden>
+      <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-body">
+        <div class="dialog__icon" id="modal-icon"></div>
+        <h2 class="dialog__title" id="modal-title"></h2>
+        <div class="dialog__body" id="modal-body"></div>
+        <div class="dialog__actions" id="modal-actions"></div>
       </div>
     </div>
 
-    <!-- MODAL DE EVENTO -->
-    <div id="event-modal" class="modal-overlay">
-      <div class="modal-box">
-        <h2 class="modal-title" id="event-title">Evento!</h2>
-        <p class="modal-text" id="event-desc">Descrição do evento...</p>
-        <div class="modal-choices" id="event-choices">
-          <!-- Botões via JS -->
+    <div class="overlay overlay--game" id="crash" hidden>
+      <div class="game-card game-card--crash" role="dialog" aria-modal="true" aria-labelledby="crash-title">
+        <header class="game-card__head">
+          <h2 id="crash-title"><span data-icon="trend"></span> A manchete está decolando</h2>
+          <p class="game-card__sub">Imprima antes do crash. Se cair, a matéria é desmentida.</p>
+        </header>
+        <p class="crash__headline" id="crash-headline"></p>
+        <div class="crash__stage" id="crash-stage">
+          <canvas id="crash-canvas"></canvas>
+          <div class="crash__status" id="crash-status" role="status"><span class="dot"></span><span id="crash-status-text">Preparando</span></div>
+          <div class="crash__readout">
+            <div class="crash__mult" id="crash-mult">x1,00</div>
+            <div class="crash__sub" id="crash-sub"></div>
+          </div>
+        </div>
+        <div class="crash__history" id="crash-history" aria-label="Últimos resultados"></div>
+        <div class="crash__controls" id="crash-controls">
+          <button type="button" class="btn btn--publish btn--lg" id="crash-cashout" data-icon="print">Imprimir agora <small>Espaço</small></button>
+        </div>
+        <div class="crash__result" id="crash-result" hidden></div>
+      </div>
+    </div>
+
+    <div class="overlay overlay--game" id="maze" hidden>
+      <div class="game-card game-card--maze" role="dialog" aria-modal="true" aria-labelledby="maze-title">
+        <header class="game-card__head">
+          <h2 id="maze-title"><span data-icon="incognito"></span> Ficar na Miúda</h2>
+          <p class="game-card__sub" id="maze-sub">Chegue ao esconderijo verde sem entrar no cone de visão dos guardas.</p>
+        </header>
+        <div class="maze__hud">
+          <span><span data-icon="siren"></span> Guardas: <b id="maze-guards">2</b></span>
+          <span><span data-icon="calendar"></span> Tempo: <b id="maze-time">40</b>s</span>
+        </div>
+        <div class="maze__stage"><canvas id="maze-canvas"></canvas><div class="maze__overlay" id="maze-overlay"></div></div>
+        <div class="dpad" id="maze-dpad" aria-label="Controles">
+          <button type="button" class="dpad__btn dpad__up" data-dir="up" aria-label="Cima" data-icon="up"></button>
+          <button type="button" class="dpad__btn dpad__left" data-dir="left" aria-label="Esquerda" data-icon="left"></button>
+          <button type="button" class="dpad__btn dpad__down" data-dir="down" aria-label="Baixo" data-icon="down"></button>
+          <button type="button" class="dpad__btn dpad__right" data-dir="right" aria-label="Direita" data-icon="right"></button>
+        </div>
+        <p class="game-card__hint">Setas ou WASD no teclado · arraste o dedo no labirinto ou use o direcional no celular</p>
+      </div>
+    </div>
+
+    <div class="overlay overlay--game" id="shred" hidden>
+      <div class="game-card game-card--shred" role="dialog" aria-modal="true" aria-labelledby="shred-title">
+        <header class="game-card__head">
+          <h2 id="shred-title"><span data-icon="shredder"></span> Queima de Arquivo</h2>
+          <p class="game-card__sub">Toque nas <b>provas</b> (carimbo vermelho) antes que caiam na mesa do delegado. Deixe os papéis inocentes passarem.</p>
+        </header>
+        <div class="maze__hud">
+          <span><span data-icon="alert"></span> Vidas: <b id="shred-lives">3</b></span>
+          <span><span data-icon="shredder"></span> Trituradas: <b id="shred-score">0</b></span>
+          <span><span data-icon="calendar"></span> Tempo: <b id="shred-time">20</b>s</span>
+        </div>
+        <div class="shred__stage" id="shred-stage"><canvas id="shred-canvas"></canvas><div class="maze__overlay" id="shred-overlay"></div></div>
+      </div>
+    </div>
+
+    <div class="overlay overlay--ending" id="ending" hidden>
+      <div class="ending" role="dialog" aria-modal="true" aria-labelledby="ending-title">
+        <p class="ending__kicker">Edição final</p>
+        <h2 class="ending__title" id="ending-title"></h2>
+        <div class="ending__art" id="ending-art"></div>
+        <p class="ending__text" id="ending-text"></p>
+        <dl class="ending__stats" id="ending-stats"></dl>
+        <button type="button" class="btn btn--primary btn--lg" id="ending-restart" data-icon="play">Voltar ao menu</button>
+      </div>
+    </div>
+
+    <div class="overlay overlay--prison" id="prison" hidden>
+      <div class="prison" role="dialog" aria-modal="true" aria-label="Polícia na porta">
+        <div class="prison__text" id="prison-text" aria-live="assertive"></div>
+        <div class="prison__choices" id="prison-choices" hidden>
+          <button type="button" class="btn btn--prison" data-choice="sim">Sim</button>
+          <button type="button" class="btn btn--prison" data-choice="nao">Não</button>
         </div>
       </div>
     </div>
 
-    <!-- MODAL INFORMAÇÃO SIMPLES (Regras, Game Over stats) -->
-    <div id="info-modal" class="modal-overlay">
-      <div class="modal-box">
-        <h2 class="modal-title" id="info-title">Aviso</h2>
-        <p class="modal-text" id="info-desc">Texto</p>
-        <button class="modal-btn" onclick="closeInfoModal()" id="info-btn">
-          OK
-        </button>
-      </div>
-    </div>
+    <div class="toasts" id="toasts" aria-live="polite"></div>
 
-    <!-- APOSTA DE PUBLICAÇÃO -->
-    <div id="bet-overlay" class="ov">
-      <div class="ov-box">
-        <h2>🖨️ SEGURE A TENSÃO!</h2>
-        <p>
-          Quanto mais espera, mais rende e mais arrisca. Se estourar, a edição
-          sai tosca.
-        </p>
-        <div id="bet-mult">x1.00</div>
-        <div class="bar-bg"><div id="bet-fill"></div></div>
-        <button class="ov-btn" onclick="releaseBet(false)">
-          SOLTAR! (Espaço)
-        </button>
-      </div>
-    </div>
-
-    <!-- AO VIVO -->
-    <div id="live-overlay" class="ov" onclick="closeLive()">
-      <div class="ov-box">
-        <div class="live-tag">● AO VIVO</div>
-        <p id="live-head" style="font-style: italic; margin: 8px 0"></p>
-        <div id="live-views">0</div>
-        <div>visualizações</div>
-        <div
-          style="color: var(--green); font-weight: 900; margin-top: 6px"
-          id="live-money"
-        ></div>
-        <div id="live-cm"></div>
-      </div>
-    </div>
-
-    <!-- CENA DE PRISÃO -->
-    <div id="prison-screen">
-      <div id="prison-text"></div>
-      <div id="prison-choices">
-        <button class="prison-btn" onclick="resolvePrison('sim')">SIM</button>
-        <button class="prison-btn" onclick="resolvePrison('nao')">NÃO</button>
-      </div>
-    </div>
-
-    <script src="script.js"></script>
-    <script src="extras.js"></script>
-    <script src="upgrades-mini.js"></script>
+    <!-- Scripts em ordem (sem build, sem módulos: funciona abrindo o index.html com dois cliques) -->
+    <script src="js/config.js"></script>
+    <script src="js/assets.js"></script>
+    <script src="js/core/util.js"></script>
+    <script src="js/data/content.js"></script>
+    <script src="js/data/news.js"></script>
+    <script src="js/core/rules.js"></script>
+    <script src="js/core/storage.js"></script>
+    <script src="js/core/audio.js"></script>
+    <script src="js/ui/icons.js"></script>
+    <script src="js/ui/illustrations.js"></script>
+    <script src="js/ui/dom.js"></script>
+    <script src="js/ui/modal.js"></script>
+    <script src="js/ui/hud.js"></script>
+    <script src="js/ui/sidebar.js"></script>
+    <script src="js/ui/newsroom.js"></script>
+    <script src="js/ui/stickers.js"></script>
+    <script src="js/ui/upgrades.js"></script>
+    <script src="js/ui/tabs.js"></script>
+    <script src="js/ui/endings.js"></script>
+    <script src="js/minigames/crash.js"></script>
+    <script src="js/minigames/maze.js"></script>
+    <script src="js/minigames/shredder.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/main.js"></script>
   </body>
 </html>

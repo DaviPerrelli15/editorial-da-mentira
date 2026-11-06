@@ -1,0 +1,229 @@
+/* =====================================================================
+   BASE: tokens de design, reset, tipografia, botões, ícones e foco.
+   Tema único escuro ("redação à noite") com papel de jornal por cima.
+   ===================================================================== */
+:root {
+  color-scheme: dark;
+
+  /* fundo e painéis */
+  --bg: #0b0f1c;
+  --bg-2: #10162a;
+  --panel: #161d33;
+  --panel-2: #1d2541;
+  --panel-3: #252f52;
+  --line: #2b3558;
+  --line-2: #3a4775;
+
+  /* texto */
+  --text: #eef1f8;
+  --muted: #aab3cd;
+  --dim: #8590b0;
+
+  /* cores de status (barra de cima) */
+  --money: #3ee08f;
+  --actions: #ffd23f;
+  --followers: #4cc3ff;
+  --star: #ffd23f;
+  --warn: #ffb020;
+  --danger: #ff4d5e;
+  --ok: #3ee08f;
+
+  /* papel e tinta */
+  --paper: #f3ead3;
+  --paper-2: #e6d8b6;
+  --ink: #241c12;
+  --ink-2: #5a4e38;
+  --headline: #b3121b;
+
+  /* ações */
+  --primary: #ffd23f;
+  --primary-ink: #1f1600;
+  --publish: #d61f2b;
+  --publish-2: #a3111b;
+
+  --font-ui: "Barlow", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-cond: "Barlow Condensed", "Arial Narrow", "Segoe UI", sans-serif;
+  --font-serif: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-mast: "UnifrakturMaguntia", "Old English Text MT", Georgia, serif;
+  --font-hand: "Caveat", "Segoe Print", "Bradley Hand", cursive;
+
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  --focus: 0 0 0 3px #0b0f1c, 0 0 0 5px #ffd23f;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-top: env(safe-area-inset-top, 0px);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden; /* item 2: a página nunca rola inteira */
+}
+body {
+  background:
+    radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.035) 1px, transparent 1.4px) 0 0 / 16px 16px,
+    radial-gradient(1200px 600px at 50% -10%, #1a2448 0%, transparent 60%),
+    var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 15px;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+h1,
+h2,
+h3,
+p,
+dl,
+dd,
+ol,
+ul,
+figure {
+  margin: 0;
+}
+ol,
+ul {
+  padding: 0;
+  list-style: none;
+}
+img,
+svg,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+button {
+  font: inherit;
+  color: inherit;
+}
+[hidden] {
+  display: none !important;
+}
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------- ícones ---------- */
+.icon {
+  width: 1.15em;
+  height: 1.15em;
+  flex: none;
+  vertical-align: -0.18em;
+}
+
+/* ---------- foco visível ---------- */
+:focus {
+  outline: none;
+}
+:focus-visible {
+  box-shadow: var(--focus);
+  border-radius: 6px;
+}
+
+/* ---------- botões ---------- */
+.btn {
+  --btn-bg: var(--panel-2);
+  --btn-fg: var(--text);
+  --btn-border: var(--line-2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--btn-border);
+  border-radius: var(--radius-sm);
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  font-family: var(--font-cond);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    transform 0.12s ease,
+    filter 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    opacity 0.2s ease;
+}
+.btn small {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  opacity: 0.85;
+}
+.btn:hover:not(:disabled) {
+  filter: brightness(1.12);
+}
+.btn:active:not(:disabled) {
+  transform: translateY(1px) scale(0.99);
+}
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  filter: saturate(0.3);
+}
+.btn--primary {
+  --btn-bg: var(--primary);
+  --btn-fg: var(--primary-ink);
+  --btn-border: transparent;
+}
+.btn--secondary {
+  --btn-bg: var(--panel-3);
+  --btn-border: var(--line-2);
+}
+.btn--ghost {
+  --btn-bg: transparent;
+  --btn-fg: var(--muted);
+}
+.btn--ghost:hover:not(:disabled) {
+  --btn-fg: var(--text);
+  --btn-border: var(--muted);
+}
+.btn--lg {
+  min-height: 54px;
+  font-size: 1.25rem;
+  padding: 0 26px;
+}
+.btn--sm {
+  min-height: 34px;
+  font-size: 0.9rem;
+  padding: 0 12px;
+}
+.btn--icon {
+  width: 44px;
+  padding: 0;
+}
+.btn--icon .icon {
+  width: 22px;
+  height: 22px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
