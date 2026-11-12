@@ -49,6 +49,7 @@ University extension project by Group 10 of the Systems Analysis and Development
 | `img/banca1.webp` … `img/banca10.webp` | Photos of the 10 Gazeta da Manhã headquarters, one per game level, as WebP 1056×792 (4:3 crop showing the building's sign) |
 | `img/adesivos/` | The 7 editing stickers created by the team (WebP with transparent background) |
 | `img/qrcode-forms.svg` | QR Code of the assessment form, the same one as on slide 16 |
+| `img/readme/` | Preview for this README: the GIF of a match (`preview.gif`, 9.8 s, 2.6 MB) and 3 game screenshots in WebP (start screen, game running and level 7) |
 | `css/` | Game styles in 4 files: base (colors and buttons), layout (fixed screen, 3 columns and tabs), components and overlays (mini-games and endings) |
 | `js/config.js` | Every balance number in the game, each one with its reason in a comment |
 | `js/assets.js` | Names and photos of the 10 headquarters levels and the sticker paths, in one place |
@@ -80,6 +81,11 @@ University extension project by Group 10 of the Systems Analysis and Development
 ├── 📁 img
 │  ├── 📁 adesivos
 │  │  └── … (7 .webp files)
+│  ├── 📁 readme
+│  │  ├── 🖼️ jogo-rodando.webp
+│  │  ├── 🖼️ nivel-7-sede-editorial.webp
+│  │  ├── 🎞️ preview.gif
+│  │  └── 🖼️ tela-inicial.webp
 │  ├── … (10 files banca1.webp to banca10.webp)
 │  └── 🖼️ qrcode-forms.svg
 ├── 📁 js
@@ -137,9 +143,9 @@ All of this happens in the post-truth era, where emotion speaks louder than fact
 
 ## 📊 Misinformation in numbers
 
-The data that opens the workshop (slides 6, 8 and 9), checked against the sources cited in the paper.
+The data that opens the workshop (slides 6, 8 and 9), checked against the sources cited in the paper. The documents only cover 2 years (2024 and 2025), so each line has 2 points: nothing was estimated in between.
 
-**AI-made fakes exploded in one year** · source: [Agência Lupa (2026)](https://www.agencialupa.org/noticias/2026/02/05/fakes-com-ia-crescem-308-em-um-ano-revela-estudo-inedito-da-lupa/)
+**AI-made fakes exploded in one year**
 
 ```mermaid
 %%{init: {"xyChart": {"width": 760, "height": 380}, "themeVariables": {"xyChart": {"plotColorPalette": "#B98E00"}}}}%%
@@ -147,12 +153,12 @@ xychart-beta
   title "AI-made false content fact-checked by Lupa"
   x-axis "Year" ["2024", "2025"]
   y-axis "Cases" 0 --> 180
-  bar [39, 159]
+  line [39, 159]
 ```
 
-<sub>From 39 to 159 cases: +308% (slide 6). In 2025, 1 in every 4 of Lupa's fact-checks (25%) was already about AI-made content, and more than three quarters of that content used the face or voice of well-known people.</sub>
+<sub>Source: slide 6 and the paper, based on [Agência Lupa (2026)](https://www.agencialupa.org/noticias/2026/02/05/fakes-com-ia-crescem-308-em-um-ano-revela-estudo-inedito-da-lupa/). From 39 to 159 cases: +308%. In 2025, 1 in every 4 of Lupa's fact-checks was already about AI-made content, and more than 75% of that content used the face or voice of well-known people.</sub>
 
-**In an election year, lies become strategy** · source: [Agência Lupa (2026)](https://www.agencialupa.org/noticias/2026/02/05/fakes-com-ia-crescem-308-em-um-ano-revela-estudo-inedito-da-lupa/)
+**In an election year, lies become strategy**
 
 ```mermaid
 %%{init: {"xyChart": {"width": 760, "height": 380}, "themeVariables": {"xyChart": {"plotColorPalette": "#B98E00"}}}}%%
@@ -160,33 +166,33 @@ xychart-beta
   title "AI-made fakes with an ideological bias"
   x-axis "Year" ["2024", "2025"]
   y-axis "% of AI-made content" 0 --> 50
-  bar [33, 45]
+  line [33, 45]
 ```
 
-<sub>Almost 45% in 2025, against 33% in 2024 (slide 8): attacks on candidates from every side, fear in times of crisis and family fights.</sub>
+<sub>Source: slide 8, based on [Agência Lupa (2026)](https://www.agencialupa.org/noticias/2026/02/05/fakes-com-ia-crescem-308-em-um-ano-revela-estudo-inedito-da-lupa/). 45% in 2025, against 33% in 2024: attacks on candidates from every side, fear in times of crisis and family fights.</sub>
 
-**The real impact in low-income neighborhoods** · source: [CalangoLab (2026), via Desinformante](https://desinformante.com.br/relatorio-desinformacao-afeta-vida-nas-periferias/)
+**The real impact in low-income neighborhoods**
 
 | 📱 Have received misinformation | 🔁 The lie changed what the person did | 🔍 Never check | 🗣️ People interviewed |
 |:---:|:---:|:---:|:---:|
-| **over 77%** | **1 in every 4 cases** | **almost 1 in 4** | **404** (9 neighborhoods of Vitória, ES) |
+| **77%** | **1 in every 4 cases** | **almost 1 in 4** | **404** (low-income neighborhoods of Vitória, ES) |
 
-<sub>Slide 9: a child who skipped school, people who missed work, a missed doctor's appointment and a fake curfew.</sub>
+<sub>Source: slide 9 and the paper, based on [CalangoLab (2026), via Desinformante](https://desinformante.com.br/relatorio-desinformacao-afeta-vida-nas-periferias/). A survey from a single point in time, with no time series, so it stays as numbers instead of a line. Examples from the slide: a child who skipped school, people who missed work, a missed doctor's appointment and a fake curfew.</sub>
 
 <details>
 <summary>📋 See every number with its source</summary>
 
-| Number | What it measures | Source |
-|---|---|---|
-| +308% | Growth of AI-made fakes, from 2024 to 2025 | Agência Lupa (2026) |
-| 39 → 159 | AI-made false content cases fact-checked by Lupa (2024 → 2025) | Agência Lupa (2026) |
-| 4.6% → 25% | Share of Lupa's fact-checks that were about AI-made content (2024 → 2025) | Agência Lupa (2026) |
-| over 75% | AI-made content in 2025 using the face or voice of well-known people | Agência Lupa (2026) |
-| 33% → almost 45% | AI-made content with an ideological bias (2024 → 2025) | Agência Lupa (2026) |
-| over 77% | Residents interviewed in low-income neighborhoods of Vitória (ES) who have received misinformation | CalangoLab (2026) |
-| 1 in 4 | Cases in which misinformation changed what the person did | CalangoLab (2026) |
-| almost 1 in 4 | People who never check whether information is true | CalangoLab (2026) |
-| 404 | Residents interviewed, in 9 neighborhoods and communities | CalangoLab (2026) |
+| Number | What it measures | Where it is | Original source |
+|---|---|---|---|
+| +308% | Growth of AI-made fakes, from 2024 to 2025 | slide 6 and paper | Agência Lupa (2026) |
+| 39 → 159 | AI-made false content cases fact-checked by Lupa (2024 → 2025) | slide 6 | Agência Lupa (2026) |
+| 1 in 4 | Lupa's 2025 fact-checks that were already about AI-made content | slide 6 | Agência Lupa (2026) |
+| +75% | AI-made content using the face or voice of well-known people | slide 6 | Agência Lupa (2026) |
+| 33% → 45% | AI-made fakes with an ideological bias (2024 → 2025) | slide 8 | Agência Lupa (2026) |
+| 77% | Residents interviewed in low-income neighborhoods of Vitória (ES) who have received misinformation | slide 9 | CalangoLab (2026) |
+| 1 in 4 | Cases in which the lie changed what the person did | slide 9 | CalangoLab (2026) |
+| almost 1 in 4 | People who never check whether information is true | slide 9 | CalangoLab (2026) |
+| 404 | Residents interviewed | slide 9 | CalangoLab (2026) |
 
 </details>
 
@@ -198,14 +204,25 @@ Two hours in the school's multimedia room, always in this order:
 
 ```mermaid
 flowchart LR
-  A["📝 Pre-test<br/>form"] --> B["🎤 Interactive talk<br/>slides · 45 min"]
-  B --> C["🎮 Educational game<br/>Editorial da Mentira · 45 min"]
-  C --> D["📝 Assessment<br/>post-test · 30 min"]
+  A["🤝 Introduction"] --> B["🖥️ Slides"]
+  B --> C["🎮 Game"]
+  C --> D["📝 Forms"]
+  D --> E["🖊️ Minutes"]
+  E --> F["👋 Wrap-up"]
   classDef etapa stroke:#B98E00,stroke-width:2px
-  class A,B,C,D etapa
+  class A,B,C,D,E,F etapa
 ```
 
-<sub>The pre-test opens the first stage and the post-test closes the third, with the same questions: comparing them shows how much the class improved.</sub>
+<sub>One stage at a time, from left to right: the next one only starts when the previous one ends.</sub>
+
+| Stage | What happens |
+|---|---|
+| 🤝 **1. Introduction** | The group introduces itself and chats with the class: how many messages did you get on WhatsApp today? And how many did you check? |
+| 🖥️ **2. Slides** | Each member presents their own block: local context, misinformation and AI, the solution and the game, citizenship and assessment |
+| 🎮 **3. Game** | The team in charge runs the Editorial da Mentira match; the challenge is to reach the Redação de Bairro without getting arrested |
+| 📝 **4. Forms** | The class answers the form via the QR Code on slide 16 (anonymous, about 3 minutes) |
+| 🖊️ **5. Minutes** | The workshop is recorded in minutes (ata), which go into the final report (PEX-56) |
+| 👋 **6. Wrap-up** | Final questions for the class (slide 17) and thanks to ETE Janga (slide 18) |
 
 | When | Where | Who takes part |
 |---|---|---|
@@ -222,12 +239,28 @@ flowchart LR
 
 ## 🎮 The game: Editorial da Mentira
 
-**[Play in the browser](https://daviperrelli15.github.io/editorial-da-mentira/)**, nothing to install. You are the editor of the Gazeta da Manhã and you play **as the one who makes fake news**, to learn the tricks from the inside: those who know the trick fall for it less.
+**[🎮 Play now](https://daviperrelli15.github.io/editorial-da-mentira/)** · right in the browser, nothing to install.
+
+You are the editor of the Gazeta da Manhã and you play **as the one who makes fake news**, to learn the tricks from the inside: those who know the trick fall for it less.
+
+[![Match recorded in the game: the editor slaps the Sensationalism and Clickbait stickers on, publishes the headline, prints at x2.18 before the crash and goes back to the newsroom](./img/readme/preview.gif)](https://daviperrelli15.github.io/editorial-da-mentira/)
+
+<sub>A real match in 9.8 s: 2 stickers on, headline published and printed at x2.18 before the crash. Recorded with Playwright, sped up about 1.4× and with the countdown before takeoff shortened. Click the GIF to play.</sub>
 
 1. Build a dull headline (who, action and topic).
 2. Slap on stickers: each one is a real misinformation trick.
 3. Publish and print before the crash: if it falls, the story gets debunked.
 4. Pay the week's bills. If Police Attention hits 100%, the Federal Police knocks on the door.
+
+<table>
+  <tr>
+    <td align="center" width="33%"><a href="./img/readme/tela-inicial.webp"><img src="./img/readme/tela-inicial.webp" width="260" alt="Game start screen: the title O Editorial da Mentira on newspaper paper, with the New game and How to play buttons"/></a><br/><sub><b>Start screen</b></sub></td>
+    <td align="center" width="33%"><a href="./img/readme/jogo-rodando.webp"><img src="./img/readme/jogo-rodando.webp" width="260" alt="Game running: the Gazeta da Manhã newsroom with a random headline and the Sensationalism and Clickbait stickers on the paper"/></a><br/><sub><b>Game running</b></sub></td>
+    <td align="center" width="33%"><a href="./img/readme/nivel-7-sede-editorial.webp"><img src="./img/readme/nivel-7-sede-editorial.webp" width="260" alt="Game level 7: the Sede Editorial photo on the headquarters card and the Backstage panel with upgrades for sale"/></a><br/><sub><b>Level 7: Sede Editorial</b></sub></td>
+  </tr>
+</table>
+
+<sub>Game screenshots at 1280×900; click to enlarge. The level 7 one uses a save prepared for the screenshot, with the Bastidores (Backstage) upgrades panel open.</sub>
 
 | Sticker | In real life (slide 12) |
 |---|---|
@@ -247,17 +280,24 @@ Besides the news crash, there are two more mini-games: the **Ficar na Miúda** (
 
 Group 10 · Systems Analysis and Development · UNINASSAU, Shopping Patteo Olinda campus.
 
-| Member | GitHub |
-|---|---|
-| Carlos Abreu | [carloshenrique1611](https://github.com/carloshenrique1611) |
-| Davi Perrelli | [DaviPerrelli15](https://github.com/DaviPerrelli15) |
-| David Brian | [briandevbr](https://github.com/briandevbr) |
-| Gabriel Vereda | |
-| Guilherme Cauã | |
-| Guilherme Nunes | |
-| Miguel Arthur | [miguelarthur202](https://github.com/miguelarthur202) |
-| Rayanne Melo | |
-| Renato Oliveira | |
+<table>
+  <tr>
+    <td align="center" width="33%"><a href="https://github.com/carloshenrique1611"><img src="https://wsrv.nl/?url=github.com/carloshenrique1611.png&amp;w=240&amp;h=240&amp;fit=cover&amp;mask=circle&amp;output=png" width="100" alt="Profile photo of Carlos Abreu"/></a><br/><b>Carlos Abreu</b><br/><a href="https://github.com/carloshenrique1611"><sub>@carloshenrique1611</sub></a></td>
+    <td align="center" width="33%"><a href="https://github.com/DaviPerrelli15"><img src="https://wsrv.nl/?url=github.com/DaviPerrelli15.png&amp;w=240&amp;h=240&amp;fit=cover&amp;mask=circle&amp;output=png" width="100" alt="Profile photo of Davi Perrelli"/></a><br/><b>Davi Perrelli</b><br/><a href="https://github.com/DaviPerrelli15"><sub>@DaviPerrelli15</sub></a></td>
+    <td align="center" width="33%"><a href="https://github.com/briandevbr"><img src="https://wsrv.nl/?url=github.com/briandevbr.png&amp;w=240&amp;h=240&amp;fit=cover&amp;mask=circle&amp;output=png" width="100" alt="Profile photo of David Brian"/></a><br/><b>David Brian</b><br/><a href="https://github.com/briandevbr"><sub>@briandevbr</sub></a></td>
+  </tr>
+  <tr>
+    <td align="center" width="33%"><a href="https://github.com/Gabriel29v"><img src="https://wsrv.nl/?url=github.com/Gabriel29v.png&amp;w=240&amp;h=240&amp;fit=cover&amp;mask=circle&amp;output=png" width="100" alt="Profile photo of Gabriel Vereda"/></a><br/><b>Gabriel Vereda</b><br/><a href="https://github.com/Gabriel29v"><sub>@Gabriel29v</sub></a></td>
+    <td align="center" width="33%"><a href="https://github.com/gui-cauadev"><img src="https://wsrv.nl/?url=github.com/gui-cauadev.png&amp;w=240&amp;h=240&amp;fit=cover&amp;mask=circle&amp;output=png" width="100" alt="Profile photo of Guilherme Cauã"/></a><br/><b>Guilherme Cauã</b><br/><a href="https://github.com/gui-cauadev"><sub>@gui-cauadev</sub></a></td>
+    <td align="center" width="33%"><a href="https://github.com/miguelarthur202"><img src="https://wsrv.nl/?url=github.com/miguelarthur202.png&amp;w=240&amp;h=240&amp;fit=cover&amp;mask=circle&amp;output=png" width="100" alt="Profile photo of Miguel Arthur"/></a><br/><b>Miguel Arthur</b><br/><a href="https://github.com/miguelarthur202"><sub>@miguelarthur202</sub></a></td>
+  </tr>
+  <tr>
+    <td align="center" width="33%"><a href="https://github.com/rayannemelo222"><img src="https://wsrv.nl/?url=github.com/rayannemelo222.png&amp;w=240&amp;h=240&amp;fit=cover&amp;mask=circle&amp;output=png" width="100" alt="Profile photo of Rayanne Melo"/></a><br/><b>Rayanne Melo</b><br/><a href="https://github.com/rayannemelo222"><sub>@rayannemelo222</sub></a></td>
+    <td align="center" width="33%"><a href="https://github.com/v1ninato"><img src="https://wsrv.nl/?url=github.com/v1ninato.png&amp;w=240&amp;h=240&amp;fit=cover&amp;mask=circle&amp;output=png" width="100" alt="Profile photo of Renato Oliveira"/></a><br/><b>Renato Oliveira</b><br/><a href="https://github.com/v1ninato"><sub>@v1ninato</sub></a></td>
+  </tr>
+</table>
+
+<sub>8 members in alphabetical order. Photo and link come from each one's GitHub profile.</sub>
 
 ---
 

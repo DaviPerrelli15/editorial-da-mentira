@@ -49,6 +49,7 @@ Projeto de extensão do Grupo 10 de Análise e Desenvolvimento de Sistemas da UN
 | `img/banca1.webp` … `img/banca10.webp` | Fotos das 10 sedes da Gazeta da Manhã, uma por nível do jogo, em WebP 1056×792 (recorte 4:3 com a placa do prédio) |
 | `img/adesivos/` | Os 7 adesivos de edição criados pelo time (WebP com fundo transparente) |
 | `img/qrcode-forms.svg` | QR Code do formulário de avaliação, o mesmo do slide 16 |
+| `img/readme/` | Preview deste README: o GIF de uma partida (`preview.gif`, 9,8 s, 2,6 MB) e 3 prints do jogo em WebP (tela inicial, jogo rodando e nível 7) |
 | `css/` | Estilos do jogo em 4 arquivos: base (cores e botões), layout (tela fixa, 3 colunas e abas), componentes e sobreposições (minijogos e finais) |
 | `js/config.js` | Todos os números de balanceamento do jogo, cada um com o motivo comentado |
 | `js/assets.js` | Nomes e fotos dos 10 níveis de sede e o caminho dos adesivos, num lugar só |
@@ -80,6 +81,11 @@ Projeto de extensão do Grupo 10 de Análise e Desenvolvimento de Sistemas da UN
 ├── 📁 img
 │  ├── 📁 adesivos
 │  │  └── … (7 arquivos .webp)
+│  ├── 📁 readme
+│  │  ├── 🖼️ jogo-rodando.webp
+│  │  ├── 🖼️ nivel-7-sede-editorial.webp
+│  │  ├── 🎞️ preview.gif
+│  │  └── 🖼️ tela-inicial.webp
 │  ├── … (10 arquivos banca1.webp a banca10.webp)
 │  └── 🖼️ qrcode-forms.svg
 ├── 📁 js
@@ -137,9 +143,9 @@ Isso tudo acontece na era da pós-verdade, em que a emoção fala mais alto que 
 
 ## 📊 A desinformação em números
 
-Os dados que abrem a oficina (slides 6, 8 e 9), conferidos nas fontes citadas no artigo.
+Os dados que abrem a oficina (slides 6, 8 e 9), conferidos nas fontes citadas no artigo. Os documentos trazem só 2 anos (2024 e 2025), então cada linha tem 2 pontos: nada foi estimado no meio.
 
-**Fakes feitos com IA explodiram em um ano** · fonte: [Agência Lupa (2026)](https://www.agencialupa.org/noticias/2026/02/05/fakes-com-ia-crescem-308-em-um-ano-revela-estudo-inedito-da-lupa/)
+**Fakes feitos com IA explodiram em um ano**
 
 ```mermaid
 %%{init: {"xyChart": {"width": 760, "height": 380}, "themeVariables": {"xyChart": {"plotColorPalette": "#B98E00"}}}}%%
@@ -147,12 +153,12 @@ xychart-beta
   title "Conteúdos falsos feitos com IA checados pela Lupa"
   x-axis "Ano" ["2024", "2025"]
   y-axis "Casos" 0 --> 180
-  bar [39, 159]
+  line [39, 159]
 ```
 
-<sub>De 39 para 159 casos: +308% (slide 6). Em 2025, 1 em cada 4 checagens da Lupa (25%) já era de conteúdo criado por IA, e mais de três quartos desses conteúdos usavam o rosto ou a voz de pessoas conhecidas.</sub>
+<sub>Fonte: slide 6 e artigo, a partir de [Agência Lupa (2026)](https://www.agencialupa.org/noticias/2026/02/05/fakes-com-ia-crescem-308-em-um-ano-revela-estudo-inedito-da-lupa/). De 39 para 159 casos: +308%. Em 2025, 1 em cada 4 checagens da Lupa já era de conteúdo criado por IA, e mais de 75% desses conteúdos usavam o rosto ou a voz de pessoas conhecidas.</sub>
 
-**Em ano de eleição, a mentira vira estratégia** · fonte: [Agência Lupa (2026)](https://www.agencialupa.org/noticias/2026/02/05/fakes-com-ia-crescem-308-em-um-ano-revela-estudo-inedito-da-lupa/)
+**Em ano de eleição, a mentira vira estratégia**
 
 ```mermaid
 %%{init: {"xyChart": {"width": 760, "height": 380}, "themeVariables": {"xyChart": {"plotColorPalette": "#B98E00"}}}}%%
@@ -160,33 +166,33 @@ xychart-beta
   title "Fakes feitos com IA que tinham viés ideológico"
   x-axis "Ano" ["2024", "2025"]
   y-axis "% dos conteúdos com IA" 0 --> 50
-  bar [33, 45]
+  line [33, 45]
 ```
 
-<sub>Quase 45% em 2025, contra 33% em 2024 (slide 8): ataque a candidatos de todos os lados, medo em momentos de crise e brigas em família.</sub>
+<sub>Fonte: slide 8, a partir de [Agência Lupa (2026)](https://www.agencialupa.org/noticias/2026/02/05/fakes-com-ia-crescem-308-em-um-ano-revela-estudo-inedito-da-lupa/). 45% em 2025, contra 33% em 2024: ataque a candidatos de todos os lados, medo em momentos de crise e brigas em família.</sub>
 
-**O impacto real nas periferias** · fonte: [CalangoLab (2026), via Desinformante](https://desinformante.com.br/relatorio-desinformacao-afeta-vida-nas-periferias/)
+**O impacto real nas periferias**
 
 | 📱 Já receberam desinformação | 🔁 A mentira mudou o que a pessoa fez | 🔍 Nunca conferem | 🗣️ Pessoas ouvidas |
 |:---:|:---:|:---:|:---:|
-| **mais de 77%** | **1 em cada 4 casos** | **quase 1 em 4** | **404** (9 bairros de Vitória, ES) |
+| **77%** | **1 em cada 4 casos** | **quase 1 em 4** | **404** (periferias de Vitória, ES) |
 
-<sub>Slide 9: criança que deixou de ir à escola, gente que faltou ao trabalho, consulta médica perdida e toque de recolher falso.</sub>
+<sub>Fonte: slide 9 e artigo, a partir de [CalangoLab (2026), via Desinformante](https://desinformante.com.br/relatorio-desinformacao-afeta-vida-nas-periferias/). Pesquisa de um momento só, sem série no tempo, por isso fica em números e não em linha. Exemplos do slide: criança que deixou de ir à escola, gente que faltou ao trabalho, consulta médica perdida e toque de recolher falso.</sub>
 
 <details>
 <summary>📋 Ver todos os números com a fonte</summary>
 
-| Número | O que mede | Fonte |
-|---|---|---|
-| +308% | Crescimento dos fakes feitos com IA, de 2024 para 2025 | Agência Lupa (2026) |
-| 39 → 159 | Casos de conteúdo falso feito com IA checados pela Lupa (2024 → 2025) | Agência Lupa (2026) |
-| 4,6% → 25% | Fatia das checagens da Lupa que eram de conteúdo com IA (2024 → 2025) | Agência Lupa (2026) |
-| mais de 75% | Conteúdos com IA em 2025 que usavam rosto ou voz de pessoas conhecidas | Agência Lupa (2026) |
-| 33% → quase 45% | Conteúdos com IA com viés ideológico (2024 → 2025) | Agência Lupa (2026) |
-| mais de 77% | Moradores ouvidos em periferias de Vitória (ES) que já receberam desinformação | CalangoLab (2026) |
-| 1 em 4 | Casos em que a desinformação mudou o que a pessoa fez | CalangoLab (2026) |
-| quase 1 em 4 | Pessoas que nunca conferem se a informação é verdadeira | CalangoLab (2026) |
-| 404 | Moradores ouvidos, em 9 bairros e comunidades | CalangoLab (2026) |
+| Número | O que mede | Onde está | Fonte original |
+|---|---|---|---|
+| +308% | Crescimento dos fakes feitos com IA, de 2024 para 2025 | slide 6 e artigo | Agência Lupa (2026) |
+| 39 → 159 | Casos de conteúdo falso feito com IA checados pela Lupa (2024 → 2025) | slide 6 | Agência Lupa (2026) |
+| 1 em 4 | Checagens da Lupa em 2025 que já eram de conteúdo criado por IA | slide 6 | Agência Lupa (2026) |
+| +75% | Conteúdos com IA que usavam rosto ou voz de pessoas conhecidas | slide 6 | Agência Lupa (2026) |
+| 33% → 45% | Fakes com IA com viés ideológico (2024 → 2025) | slide 8 | Agência Lupa (2026) |
+| 77% | Moradores ouvidos em periferias de Vitória (ES) que já receberam desinformação | slide 9 | CalangoLab (2026) |
+| 1 em 4 | Casos em que a mentira mudou o que a pessoa fez | slide 9 | CalangoLab (2026) |
+| quase 1 em 4 | Pessoas que nunca conferem se a informação é verdadeira | slide 9 | CalangoLab (2026) |
+| 404 | Moradores ouvidos | slide 9 | CalangoLab (2026) |
 
 </details>
 
@@ -198,14 +204,25 @@ Duas horas no espaço multimídia da escola, sempre nesta ordem:
 
 ```mermaid
 flowchart LR
-  A["📝 Pré-teste<br/>formulário"] --> B["🎤 Exposição dialogada<br/>slides · 45 min"]
-  B --> C["🎮 Jogo educativo<br/>Editorial da Mentira · 45 min"]
-  C --> D["📝 Avaliação<br/>pós-teste · 30 min"]
+  A["🤝 Apresentação"] --> B["🖥️ Slides"]
+  B --> C["🎮 Jogo"]
+  C --> D["📝 Forms"]
+  D --> E["🖊️ Ata"]
+  E --> F["👋 Fechamento"]
   classDef etapa stroke:#B98E00,stroke-width:2px
-  class A,B,C,D etapa
+  class A,B,C,D,E,F etapa
 ```
 
-<sub>O pré-teste abre a primeira etapa e o pós-teste fecha a terceira, com as mesmas perguntas: a comparação mostra o quanto a turma evoluiu.</sub>
+<sub>Uma etapa por vez, da esquerda pra direita: a seguinte só começa quando a anterior termina.</sub>
+
+| Etapa | O que acontece |
+|---|---|
+| 🤝 **1. Apresentação** | O grupo se apresenta e troca ideia com o pessoal: quantas mensagens você recebeu hoje no WhatsApp? E quantas conferiu? |
+| 🖥️ **2. Slides** | Cada integrante apresenta o seu bloco: contexto local, desinformação e IA, a solução e o jogo, cidadania e avaliação |
+| 🎮 **3. Jogo** | A equipe responsável conduz a partida do Editorial da Mentira; o desafio é chegar à Redação de Bairro sem ser preso |
+| 📝 **4. Forms** | A turma responde o formulário pelo QR Code do slide 16 (anônimo, uns 3 minutos) |
+| 🖊️ **5. Ata** | Registro da oficina em ata, que entra no relatório final (PEX-56) |
+| 👋 **6. Fechamento** | Perguntas finais pra turma (slide 17) e agradecimento à ETE Janga (slide 18) |
 
 | Quando | Onde | Quem participa |
 |---|---|---|
@@ -222,12 +239,28 @@ flowchart LR
 
 ## 🎮 O jogo: Editorial da Mentira
 
-**[Jogue no navegador](https://daviperrelli15.github.io/editorial-da-mentira/)**, sem instalar nada. Você é o editor da Gazeta da Manhã e joga **do lado de quem cria fake news**, pra aprender os truques por dentro: quem conhece o truque cai menos nele.
+**[🎮 Jogar agora](https://daviperrelli15.github.io/editorial-da-mentira/)** · direto no navegador, sem instalar nada.
+
+Você é o editor da Gazeta da Manhã e joga **do lado de quem cria fake news**, pra aprender os truques por dentro: quem conhece o truque cai menos nele.
+
+[![Partida gravada no jogo: o editor cola os adesivos Sensacionalismo e Caça-clique, publica a manchete, imprime em x2,18 antes do crash e volta para a redação](./img/readme/preview.gif)](https://daviperrelli15.github.io/editorial-da-mentira/)
+
+<sub>Uma partida de verdade em 9,8 s: 2 adesivos colados, manchete publicada e impressa em x2,18 antes do crash. Gravada com Playwright, acelerada em cerca de 1,4× e com a contagem antes da decolagem encurtada. Clique no GIF para jogar.</sub>
 
 1. Monte uma manchete sem graça (quem, ação e assunto).
 2. Cole adesivos: cada um é um truque real de desinformação.
 3. Publique e imprima antes do crash: se cair, a matéria é desmentida.
 4. Pague as contas da semana. Se a Atenção Policial chegar a 100%, a Polícia Federal bate na porta.
+
+<table>
+  <tr>
+    <td align="center" width="33%"><a href="./img/readme/tela-inicial.webp"><img src="./img/readme/tela-inicial.webp" width="260" alt="Tela inicial do jogo: o título O Editorial da Mentira num papel de jornal, com os botões Novo jogo e Como jogar"/></a><br/><sub><b>Tela inicial</b></sub></td>
+    <td align="center" width="33%"><a href="./img/readme/jogo-rodando.webp"><img src="./img/readme/jogo-rodando.webp" width="260" alt="Jogo rodando: a redação da Gazeta da Manhã com uma manchete sorteada e os adesivos Sensacionalismo e Caça-clique colados no jornal"/></a><br/><sub><b>Jogo rodando</b></sub></td>
+    <td align="center" width="33%"><a href="./img/readme/nivel-7-sede-editorial.webp"><img src="./img/readme/nivel-7-sede-editorial.webp" width="260" alt="Nível 7 do jogo: a foto da Sede Editorial no cartão da sede e o painel Bastidores com os upgrades à venda"/></a><br/><sub><b>Nível 7: Sede Editorial</b></sub></td>
+  </tr>
+</table>
+
+<sub>Prints do jogo em 1280×900; clique para ampliar. O do nível 7 usa uma partida salva preparada pro print, com o painel Bastidores (upgrades) aberto.</sub>
 
 | Adesivo | Na vida real (slide 12) |
 |---|---|
@@ -247,17 +280,24 @@ Além do crash da notícia, há mais dois minijogos: o labirinto do **Ficar na M
 
 Grupo 10 · Análise e Desenvolvimento de Sistemas · UNINASSAU, Campus Shopping Patteo Olinda.
 
-| Integrante | GitHub |
-|---|---|
-| Carlos Abreu | [carloshenrique1611](https://github.com/carloshenrique1611) |
-| Davi Perrelli | [DaviPerrelli15](https://github.com/DaviPerrelli15) |
-| David Brian | [briandevbr](https://github.com/briandevbr) |
-| Gabriel Vereda | |
-| Guilherme Cauã | |
-| Guilherme Nunes | |
-| Miguel Arthur | [miguelarthur202](https://github.com/miguelarthur202) |
-| Rayanne Melo | |
-| Renato Oliveira | |
+<table>
+  <tr>
+    <td align="center" width="33%"><a href="https://github.com/carloshenrique1611"><img src="https://wsrv.nl/?url=github.com/carloshenrique1611.png&amp;w=240&amp;h=240&amp;fit=cover&amp;mask=circle&amp;output=png" width="100" alt="Foto de perfil de Carlos Abreu"/></a><br/><b>Carlos Abreu</b><br/><a href="https://github.com/carloshenrique1611"><sub>@carloshenrique1611</sub></a></td>
+    <td align="center" width="33%"><a href="https://github.com/DaviPerrelli15"><img src="https://wsrv.nl/?url=github.com/DaviPerrelli15.png&amp;w=240&amp;h=240&amp;fit=cover&amp;mask=circle&amp;output=png" width="100" alt="Foto de perfil de Davi Perrelli"/></a><br/><b>Davi Perrelli</b><br/><a href="https://github.com/DaviPerrelli15"><sub>@DaviPerrelli15</sub></a></td>
+    <td align="center" width="33%"><a href="https://github.com/briandevbr"><img src="https://wsrv.nl/?url=github.com/briandevbr.png&amp;w=240&amp;h=240&amp;fit=cover&amp;mask=circle&amp;output=png" width="100" alt="Foto de perfil de David Brian"/></a><br/><b>David Brian</b><br/><a href="https://github.com/briandevbr"><sub>@briandevbr</sub></a></td>
+  </tr>
+  <tr>
+    <td align="center" width="33%"><a href="https://github.com/Gabriel29v"><img src="https://wsrv.nl/?url=github.com/Gabriel29v.png&amp;w=240&amp;h=240&amp;fit=cover&amp;mask=circle&amp;output=png" width="100" alt="Foto de perfil de Gabriel Vereda"/></a><br/><b>Gabriel Vereda</b><br/><a href="https://github.com/Gabriel29v"><sub>@Gabriel29v</sub></a></td>
+    <td align="center" width="33%"><a href="https://github.com/gui-cauadev"><img src="https://wsrv.nl/?url=github.com/gui-cauadev.png&amp;w=240&amp;h=240&amp;fit=cover&amp;mask=circle&amp;output=png" width="100" alt="Foto de perfil de Guilherme Cauã"/></a><br/><b>Guilherme Cauã</b><br/><a href="https://github.com/gui-cauadev"><sub>@gui-cauadev</sub></a></td>
+    <td align="center" width="33%"><a href="https://github.com/miguelarthur202"><img src="https://wsrv.nl/?url=github.com/miguelarthur202.png&amp;w=240&amp;h=240&amp;fit=cover&amp;mask=circle&amp;output=png" width="100" alt="Foto de perfil de Miguel Arthur"/></a><br/><b>Miguel Arthur</b><br/><a href="https://github.com/miguelarthur202"><sub>@miguelarthur202</sub></a></td>
+  </tr>
+  <tr>
+    <td align="center" width="33%"><a href="https://github.com/rayannemelo222"><img src="https://wsrv.nl/?url=github.com/rayannemelo222.png&amp;w=240&amp;h=240&amp;fit=cover&amp;mask=circle&amp;output=png" width="100" alt="Foto de perfil de Rayanne Melo"/></a><br/><b>Rayanne Melo</b><br/><a href="https://github.com/rayannemelo222"><sub>@rayannemelo222</sub></a></td>
+    <td align="center" width="33%"><a href="https://github.com/v1ninato"><img src="https://wsrv.nl/?url=github.com/v1ninato.png&amp;w=240&amp;h=240&amp;fit=cover&amp;mask=circle&amp;output=png" width="100" alt="Foto de perfil de Renato Oliveira"/></a><br/><b>Renato Oliveira</b><br/><a href="https://github.com/v1ninato"><sub>@v1ninato</sub></a></td>
+  </tr>
+</table>
+
+<sub>8 integrantes em ordem alfabética. Foto e link vêm do perfil de cada um no GitHub.</sub>
 
 ---
 
