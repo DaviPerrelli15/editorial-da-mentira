@@ -171,10 +171,10 @@
       ],
       firstRentPaid: true, // o 1º aluguel é pago na assinatura do contrato (realista e dá fôlego)
       lateFee: 0.1, // multa de 10% na primeira semana de atraso
-      growthPerLevel: 1.38, // cada nível de imóvel encarece as contas em 38%
+      growthPerLevel: 1.38, // cada nível de sede encarece as contas em 38%
     },
 
-    /* ---------------- Imóvel: casa → banca (Estilo 5) ----------------
+    /* ---------------- Sede do jornal (Estilo 5) ----------------
        cost = preço para subir; perk = vantagem acumulada a partir daquele nível.      */
     property: {
       levels: [
@@ -222,7 +222,7 @@
     },
 
     /* ---------------- Eventos ----------------
-       chance = probabilidade por gatilho. money é multiplicado pela escala das contas do imóvel. */
+       chance = probabilidade por gatilho. money é multiplicado pela escala das contas da sede. */
     events: {
       chanceAfterPublish: 0.18, // depois de publicar
       chanceWeekly: 0.25, // no começo da semana

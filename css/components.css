@@ -1,9 +1,9 @@
 /* =====================================================================
-   COMPONENTES: imóvel, delegado, contas (post-its), jornal, montador de
+   COMPONENTES: sede, delegado, contas (post-its), jornal, montador de
    manchete, previsão, ações, narrador, feed, adesivos, upgrades e avisos.
    ===================================================================== */
 
-/* ---------- imóvel (polaroid) ---------- */
+/* ---------- sede (polaroid) ---------- */
 .property {
   position: relative;
   margin-top: 10px;
@@ -148,6 +148,7 @@
   width: 76px;
   height: 76px;
   border-radius: 50%;
+  overflow: hidden;
   box-shadow:
     0 0 0 3px #f2c14e,
     0 6px 14px rgba(0, 0, 0, 0.5);
@@ -1136,6 +1137,12 @@ body.tension-3::after {
   .paper {
     padding: 12px 12px 14px;
     transform: none;
+  }
+  /* foto da sede com no máximo 380 px: no tablet ela não vira um pôster */
+  .property {
+    width: 100%;
+    max-width: 380px;
+    margin-inline: auto;
   }
   /* aba Contas: os post-its vêm primeiro no celular */
   .col--left .bills {

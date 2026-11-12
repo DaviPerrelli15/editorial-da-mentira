@@ -198,7 +198,7 @@ var STRATEGIES = {
   },
 };
 
-/* Compra imóvel ou upgrade com o dinheiro que sobra acima da reserva. */
+/* Compra sede ou upgrade com o dinheiro que sobra acima da reserva. */
 function buyStuff(state, share) {
   for (var guard = 0; guard < 6; guard++) {
     var spare = (state.money - reserveFor(state)) * share;
@@ -306,7 +306,7 @@ function report(name, results) {
   console.log("\n▶ " + name.toUpperCase() + " (" + results.length + " partidas)");
   console.log("  semanas sobrevividas: p10 " + percentile(weeks, 0.1) + " · mediana " + percentile(weeks, 0.5) + " · p90 " + percentile(weeks, 0.9));
   console.log("  chegou à semana 8: " + survived(8) + " · 26: " + survived(26) + " · 52: " + survived(52) + " · " + MAX_WEEKS + ": " + survived(MAX_WEEKS));
-  console.log("  imóvel final (mediana): nível " + percentile(props, 0.5) + " · p90 nível " + percentile(props, 0.9) + " · seguidores (mediana) " + U.formatInt(percentile(foll, 0.5)));
+  console.log("  sede final (mediana): nível " + percentile(props, 0.5) + " · p90 nível " + percentile(props, 0.9) + " · seguidores (mediana) " + U.formatInt(percentile(foll, 0.5)));
   console.log(
     "  como terminou: " +
       Object.keys(endings)
@@ -348,7 +348,7 @@ function main() {
     ["Jogar no automático não basta (casual: mediana < 26 semanas)", byName.casual.median < 26],
     ["Jogo é vencível com cuidado (equilibrado: mediana ≥ 40 semanas)", byName.equilibrado.median >= 40],
     ["Jogo não é fácil demais (equilibrado: no máx. 75% chegam à semana " + MAX_WEEKS + ")", surv(byName.equilibrado, MAX_WEEKS) <= 0.75],
-    ["Equilibrado progride (mediana do imóvel ≥ nível 5)", percentile(byName.equilibrado.results.map(function (r) { return r.property; }).sort(function (a, b) { return a - b; }), 0.5) >= 5],
+    ["Equilibrado progride (mediana da sede ≥ nível 5)", percentile(byName.equilibrado.results.map(function (r) { return r.property; }).sort(function (a, b) { return a - b; }), 0.5) >= 5],
   ];
   console.log("\nMETAS");
   var ok = true;

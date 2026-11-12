@@ -85,7 +85,7 @@
     });
   }
 
-  /* ---------------- Modificadores: imóvel + upgrades + contas atrasadas ---------------- */
+  /* ---------------- Modificadores: sede + upgrades + contas atrasadas ---------------- */
   function emptyMods() {
     return { profitPct: 0, viewsPct: 0, followersPct: 0, riskFlat: 0, riskPct: 0, policePct: 0, actions: 0, repPerWeek: 0, mazeSpeedPct: 0, shredSlowPct: 0, followersWeeklyPct: 0 };
   }
@@ -405,7 +405,7 @@
     return { paid: paid };
   }
 
-  /* ---------------- Imóvel e upgrades (item 12) ---------------- */
+  /* ---------------- Sede e upgrades (item 12) ---------------- */
   function nextPropertyCost(state) {
     var levels = C().property.levels;
     return state.property < levels.length ? levels[state.property].cost : null;

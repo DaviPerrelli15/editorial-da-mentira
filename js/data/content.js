@@ -34,7 +34,7 @@
   var endings = {
     aluguel: {
       title: "Despejado!",
-      text: "O proprietário trocou a fechadura e deixou suas coisas na calçada, com o monitor em cima do colchão. A Gazeta da Manhã agora funciona num banco de praça, com o wi-fi da padaria.",
+      text: "O proprietário trocou a fechadura da sede e deixou os computadores da redação na calçada, com o letreiro da Gazeta por cima. A Gazeta da Manhã agora funciona num banco de praça, com o wi-fi da padaria.",
     },
     internet: {
       title: "Offline para sempre",
@@ -107,7 +107,7 @@
     reporter: {
       title: "Repórter no bairro",
       icon: "search",
-      text: "Um jornalista de verdade está perguntando aos seus vizinhos sobre o que acontece na sua casa.",
+      text: "Um jornalista de verdade está perguntando aos seus vizinhos sobre o que acontece na sua redação.",
       choices: ["Dar entrevista “exclusiva”", "Não abrir a porta"],
     },
     viatura: {
@@ -144,7 +144,7 @@
       "Tranquilo. Quase honesto. Quase.",
     ],
     risk: [
-      "Alguém no bairro ligou a TV e apontou para a sua casa.",
+      "Alguém no bairro ligou a TV e apontou para a sua redação.",
       "O delegado adorou essa. Anotou tudo.",
       "Ousado. A polícia também achou.",
     ],

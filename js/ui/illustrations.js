@@ -1,7 +1,7 @@
 /* =====================================================================
    ILUSTRAÇÕES PRÓPRIAS (SVG) — feitas para o jogo, sem direitos de terceiros.
    - Foto da notícia (itens 20 e Estilo 4): cena do ASSUNTO + personagem do QUEM
-   - Retrato do Delegado Amaral (Estilo 6), finais, viatura e imóvel reserva
+   - Retrato do Delegado Amaral (Estilo 6), finais, viatura e sede reserva
    ===================================================================== */
 (function (root) {
   "use strict";
@@ -318,40 +318,62 @@
   }
 
   /* ---------------- Delegado Amaral (Estilo 6) ---------------- */
+  /* Retrato de busto em quadro 120×120 recortado em círculo:
+     quepe inteiro no topo, rosto no centro (60,62) e ombros saindo pela borda de baixo. */
+  var DELEGADO_BG = { calmo: ["#2b4a75", "#16243d"], desconfiado: ["#6b5424", "#33280f"], furioso: ["#7a2632", "#3a1018"] };
   function delegado(clues) {
     var mood = clues >= 2 ? "furioso" : clues === 1 ? "desconfiado" : "calmo";
+    var id = "dlg-" + mood;
     var brows =
       mood === "furioso"
-        ? s("M30 44l12 5M70 44l-12 5", INK, 3.5)
+        ? s("M43 56l11 4M77 56l-11 4", INK, 3.4)
         : mood === "desconfiado"
-          ? s("M30 45h12M58 41l12 3", INK, 3.5)
-          : s("M30 44q6-3 12 0M58 44q6-3 12 0", INK, 3);
-    var mouth = mood === "furioso" ? s("M42 76q8-6 16 0", INK, 3) : mood === "desconfiado" ? s("M42 75h16", INK, 3) : s("M42 74q8 4 16 0", INK, 3);
-    var cheeks = mood === "furioso" ? e(32, 66, 6, 3, "#e05a4a", ' opacity=".6"') + e(68, 66, 6, 3, "#e05a4a", ' opacity=".6"') : "";
-    var steam = mood === "furioso" ? s("M14 30q-6-6 0-12M86 30q6-6 0-12", "#c9d1e0", 3) : "";
+          ? s("M43 59h11M66 56.5l11 2.4", INK, 3.4)
+          : s("M43 57q5.5-3 11 0M66 57q5.5-3 11 0", INK, 3);
+    var mouth = mood === "furioso" ? s("M53 83q7-5 14 0", INK, 2.8) : mood === "desconfiado" ? s("M53 82h14", INK, 2.8) : s("M53 81q7 4 14 0", INK, 2.8);
+    var cheeks = mood === "furioso" ? e(45, 74, 5, 2.6, "#e05a4a", ' opacity=".6"') + e(75, 74, 5, 2.6, "#e05a4a", ' opacity=".6"') : "";
+    var steam = mood === "furioso" ? s("M22 40q-6-6 0-12M98 40q6-6 0-12", "#d6dcea", 3) : "";
+    var bg = DELEGADO_BG[mood];
     return (
-      '<svg viewBox="0 0 100 100" role="img" aria-label="Delegado Amaral, ' + mood + '">' +
-      c(50, 50, 48, mood === "furioso" ? "#5a2027" : mood === "desconfiado" ? "#4b3b1f" : "#1f3350") +
-      p("M14 100q4-24 36-24t36 24Z", "#2f3b52") + p("M40 78l10 12 10-12Z", "#e8e4da") + p("M47 82h6l2 16h-10Z", "#20252f") +
-      p("M78 88l6 8-6 4-4-7Z", "#f2c14e") +
-      e(50, 56, 25, 28, "#d9a07a") +
-      e(24, 58, 4, 7, "#c98d68") + e(76, 58, 4, 7, "#c98d68") +
+      '<svg viewBox="0 0 120 120" role="img" aria-label="Delegado Amaral, ' + mood + '">' +
+      '<defs><radialGradient id="' + id + '-bg" cx="50%" cy="38%" r="70%"><stop offset="0" stop-color="' + bg[0] + '"/><stop offset="1" stop-color="' + bg[1] + '"/></radialGradient>' +
+      '<clipPath id="' + id + '-clip"><circle cx="60" cy="60" r="60"/></clipPath></defs>' +
+      '<g clip-path="url(#' + id + '-clip)">' +
+      r(0, 0, 120, 120, "url(#" + id + "-bg)") +
+      // ombros e farda (passam da borda de baixo: o círculo corta limpo)
+      p("M4 132C6 104 30 94 60 94s54 10 56 38Z", "#2f3b52") +
+      p("M20 106q8-6 18-8l-2 26H16Z", "#273248") + p("M100 106q-8-6-18-8l2 26h20Z", "#273248") +
+      p("M49 92l11 14 11-14Z", "#e8e4da") + p("M57 97h6l2.5 23h-11Z", "#1d2230") +
+      p("M78 99l2.8 5.6 6.2.9-4.5 4.4 1.1 6.1-5.6-2.9-5.6 2.9 1.1-6.1-4.5-4.4 6.2-.9Z", "#f2c14e") +
+      r(52, 80, 16, 16, "#c98d68") +
+      // cabeça
+      e(60, 64, 21, 24, "#d9a07a") +
+      e(39, 66, 3.6, 6.5, "#c98d68") + e(81, 66, 3.6, 6.5, "#c98d68") +
       brows +
-      c(36, 54, 3.2, INK) + c(64, 54, 3.2, INK) +
-      p("M47 56q3 10 6 10h-6Z", "#c98d68") +
-      p("M34 68q16-9 32 0q-6 6-16 2-10 4-16-2Z", "#3b2a1f") +
+      c(49, 64, 2.9, INK) + c(71, 64, 2.9, INK) +
+      p("M58 65q3 8 5 9h-6Z", "#c98d68") +
+      p("M47 77q13-8 26 0q-5 5-13 2-8 3-13-2Z", "#3b2a1f") +
       mouth + cheeks +
-      p("M22 36q28-26 56 0l-2 6H24Z", "#1d2a44") + r(20, 38, 60, 7, "#141c2e", 3) + p("M44 18l6-5 6 5-2 9h-8Z", "#f2c14e") +
+      // quepe inteiro: copa, faixa, distintivo e aba
+      p("M33 47Q31 23 60 19q29 4 27 28Z", "#1d2a44") +
+      p("M40 30q20-9 40 0", "none", ' stroke="#2c3d61" stroke-width="2.5" stroke-linecap="round"') +
+      r(33, 42, 54, 7, "#141c2e", 2) +
+      p("M55 26l5-4.5 5 4.5-1.6 7.5h-6.8Z", "#f2c14e") +
+      p("M35 48Q60 55 85 48l2 3.5Q60 60 33 51.5Z", "#0f1524") +
       steam +
-      "</svg>"
+      "</g></svg>"
     );
   }
 
   /* ---------------- finais (item 15) ---------------- */
   var ENDINGS = {
     aluguel: function () {
-      return sky("#25324f", "#3d4f78", "es") + r(0, 120, 200, 40, "#2b2b33") + r(30, 40, 90, 80, "#6c5a4a") + p("M20 44l55-32 55 32Z", "#4a3a2e") + r(64, 76, 22, 44, "#3a2c22") +
-        g("translate(70 92)", r(0, 6, 12, 10, "#f2c14e", 2) + p("M2 6V2a4 4 0 0 1 8 0v4", "none", ' stroke="#f2c14e" stroke-width="2"')) +
+      return sky("#25324f", "#3d4f78", "es") + r(0, 120, 200, 40, "#2b2b33") +
+        r(28, 26, 92, 94, "#7d7466") + r(28, 26, 92, 6, "#5f584d") +
+        [36, 58, 80, 102].map(function (x) { return r(x, 40, 12, 16, "#3c4a66") + r(x, 64, 12, 16, "#3c4a66"); }).join("") +
+        r(40, 84, 68, 12, "#1d2a44", 2) + t(46, 93.5, "GAZETA DA MANHÃ", 8, "#f3ead3") +
+        r(64, 98, 20, 22, "#3a2c22") +
+        g("translate(68 104)", r(0, 6, 12, 10, "#f2c14e", 2) + p("M2 6V2a4 4 0 0 1 8 0v4", "none", ' stroke="#f2c14e" stroke-width="2"')) +
         r(132, 104, 46, 18, "#9a7a5a", 2) + r(140, 82, 30, 22, "#20232b", 2) + r(143, 85, 24, 15, "#4fa3ff") + r(150, 104, 10, 4, "#20232b") + e(160, 132, 30, 4, "#000", ' opacity=".3"');
     },
     internet: function () {
@@ -382,13 +404,18 @@
     return '<svg viewBox="0 0 200 140" role="img" aria-label="Ilustração do final">' + body.replace(/id="es"/, 'id="es-' + id + '"').replace(/url\(#es\)/, "url(#es-" + id + ")") + "</svg>";
   }
 
-  /* ---------------- viatura e imóvel reserva ---------------- */
+  /* ---------------- viatura e sede reserva ---------------- */
   function copCar() {
     return '<svg viewBox="0 0 80 36" aria-hidden="true">' + r(4, 14, 72, 14, "#f4f4f4", 4) + p("M18 14l8-10h26l8 10Z", "#f4f4f4") + r(28, 6, 10, 7, "#8fd3ff", 1) + r(41, 6, 10, 7, "#8fd3ff", 1) + r(4, 19, 72, 4, "#1d3b8f") + r(32, 0, 7, 4, "#e74c3c", 1) + r(41, 0, 7, 4, "#2e86de", 1) + c(20, 29, 6, "#222") + c(60, 29, 6, "#222") + c(20, 29, 2.5, "#999") + c(60, 29, 2.5, "#999") + "</svg>";
   }
   function propertyFallback(level) {
-    var h = 40 + level * 6;
-    return '<svg viewBox="0 0 200 140" role="img" aria-label="Imóvel">' + sky("#9fc4e8", "#e1eef8", "pf") + r(0, 116, 200, 24, "#6f9a55") + r(100 - h / 2, 116 - h, h, h, "#d8c6a8") + p("M" + (90 - h / 2) + " " + (118 - h) + "L100 " + (80 - h) + "L" + (110 + h / 2) + " " + (118 - h) + "Z", "#a5533d") + r(92, 96, 16, 20, "#6b4a2b") + "</svg>";
+    var floors = Math.min(6, 1 + Math.ceil(level / 2));
+    var top = 112 - floors * 16;
+    var windows = "";
+    for (var f = 0; f < floors; f++) for (var x = 72; x <= 116; x += 22) windows += r(x, top + 6 + f * 16, 12, 9, "#9fc4e8");
+    return '<svg viewBox="0 0 200 140" role="img" aria-label="Sede">' + sky("#9fc4e8", "#e1eef8", "pf") + r(0, 116, 200, 24, "#8a8f98") +
+      r(62, top, 76, 116 - top, "#d8d0c0") + windows + r(66, top - 12, 68, 10, "#1d2a44", 2) + t(71, top - 4.5, "GAZETA DA MANHÃ", 7.5, "#f3ead3") +
+      r(92, 100, 16, 16, "#3a4a66") + "</svg>";
   }
 
   EDM.Illustrations = {

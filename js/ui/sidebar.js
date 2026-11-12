@@ -1,4 +1,4 @@
-/* Coluna esquerda: imóvel (casa → banca), Delegado Amaral e contas em post-it. */
+/* Coluna esquerda: sede do jornal, Delegado Amaral e contas em post-it. */
 (function (root) {
   "use strict";
   var EDM = (root.EDM = root.EDM || {});
@@ -14,7 +14,7 @@
       .join(" · ");
   }
 
-  /* ---------- imóvel ---------- */
+  /* ---------- sede ---------- */
   function renderProperty(state) {
     var R = EDM.Rules;
     var theme = EDM.Assets.property();
@@ -30,7 +30,7 @@
     }
     D.setText(D.$("property-name"), "Nível " + state.property + ": " + level.name);
     var perk = EDM.CONFIG.property.levels[state.property - 1].perk;
-    D.setText(D.$("property-perk"), Object.keys(perk).length ? "Vantagem: " + perkText(perk) : "Aluguel barato, zero conforto.");
+    D.setText(D.$("property-perk"), Object.keys(perk).length ? "Vantagem: " + perkText(perk) : "Começo humilde: aluguel barato.");
 
     var cost = R.nextPropertyCost(state);
     var btn = D.$("btn-property");
@@ -124,7 +124,7 @@
       if (btn && !btn.disabled) EDM.Game.payBill(btn.dataset.bill);
     });
     D.$("property-img").addEventListener("error", function () {
-      // imagem do tema ainda não existe (ex.: bancas do Miguel): mostra a ilustração reserva
+      // imagem não encontrada: mostra a ilustração reserva
       this.hidden = true;
       var fb = D.$("property-fallback");
       fb.innerHTML = EDM.Illustrations.propertyFallback(lastLevel || 1);

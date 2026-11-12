@@ -266,7 +266,7 @@
     });
   }
 
-  /* ---------------- contas, imóvel e upgrades ---------------- */
+  /* ---------------- contas, sede e upgrades ---------------- */
   function payBill(id) {
     if (!ready()) return;
     var res = R.payBill(state, id);
