@@ -86,21 +86,58 @@
        risk = pontos de atenção policial, repCost = reputação perdida.
        Notícia SEM adesivo tem risco zero (item 8).                                  */
     stickers: {
-      sensacionalismo: { profit: 0.9, viral: 1.2, risk: 4.5, repCost: 0 }, // Lucro 3 · Risco 3
-      "teoria-da-conspiracao": { profit: 0.6, viral: 1.3, risk: 4.5, repCost: 0 }, // Lucro 2 · Risco 3
-      "caca-clique": { profit: 0.9, viral: 1.35, risk: 4.5, repCost: 0 }, // Lucro 3 · Risco 3
-      "especialista-anonimo": { profit: 0.9, viral: 1.05, risk: 1.5, repCost: 0 }, // Lucro 3 · Risco 1
-      "compartilhe-agora": { profit: 0.3, viral: 2.0, risk: 1, repCost: 1 }, // Lucro 1 · Viral 4
-      "culpa-dos-alienigenas": { profit: 0.6, viral: 1.25, risk: 1, repCost: 3 }, // Lucro 2 · Reputação 3 (amarelo)
-      "cura-milagrosa": { profit: 0.9, viral: 1.15, risk: 1, repCost: 7 }, // Lucro 3 · Reputação 4 (vermelho)
+      sensacionalismo: { profit: 1.1, viral: 1.2, risk: 4.5, repCost: 0 }, // Lucro 3 · Risco 3
+      "teoria-da-conspiracao": {
+        profit: 0.6,
+        viral: 1.3,
+        risk: 4.5,
+        repCost: 0,
+      }, // Lucro 2 · Risco 3
+      "caca-clique": { profit: 1.1, viral: 1.35, risk: 4.5, repCost: 0 }, // Lucro 3 · Risco 3
+      "especialista-anonimo": {
+        profit: 0.9,
+        viral: 1.05,
+        risk: 1.5,
+        repCost: 0,
+      }, // Lucro 3 · Risco 1
+      "compartilhe-agora": { profit: 0.4, viral: 2.0, risk: 1, repCost: 1 }, // Lucro 1 · Viral 4
+      "culpa-dos-alienigenas": {
+        profit: 0.6,
+        viral: 1.25,
+        risk: 1,
+        repCost: 3,
+      }, // Lucro 2 · Reputação 3 (amarelo)
+      "cura-milagrosa": { profit: 1.4, viral: 1.15, risk: 2.5, repCost: 7 }, // Lucro 3 · Reputação 4 (vermelho)
     },
     maxStickers: 3, // limite por manchete: mais que isso não cabe no jornal
 
     combos: [
       // receitas escondidas: bônus grande, risco grande
-      { id: "absurda", requires: ["compartilhe-agora", "teoria-da-conspiracao", "caca-clique"], profit: 0.5, viral: 1.8, risk: 8 },
-      { id: "pseudociencia", requires: ["especialista-anonimo", "cura-milagrosa"], profit: 0.6, viral: 1.3, risk: 9 },
-      { id: "panico", requires: ["sensacionalismo", "compartilhe-agora", "culpa-dos-alienigenas"], profit: 0.4, viral: 2.0, risk: 6 },
+      {
+        id: "absurda",
+        requires: ["compartilhe-agora", "teoria-da-conspiracao", "caca-clique"],
+        profit: 0.7,
+        viral: 1.8,
+        risk: 8,
+      },
+      {
+        id: "pseudociencia",
+        requires: ["especialista-anonimo", "cura-milagrosa"],
+        profit: 1.2,
+        viral: 1.3,
+        risk: 9,
+      },
+      {
+        id: "panico",
+        requires: [
+          "sensacionalismo",
+          "compartilhe-agora",
+          "culpa-dos-alienigenas",
+        ],
+        profit: 0.9,
+        viral: 2.0,
+        risk: 6,
+      },
     ],
 
     /* ---------------- Crash da notícia (item 5) ----------------
@@ -150,8 +187,8 @@
       lives: 3, // erros permitidos (prova que escapa ou papel inocente triturado)
       spawnEvery: 0.85, // segundos entre papéis no começo...
       spawnEveryMin: 0.45, // ...e no fim (acelera)
-      fallSpeed: 0.22, // telas por segundo
-      fallSpeedMax: 0.42,
+      fallSpeed: 0.5, // telas por segundo
+      fallSpeedMax: 0.7,
       evidenceShare: 0.55, // 55% dos papéis são provas
       winClues: -1, // vitória: delegado perde 1 pista
       winPoliceIfNoClue: 8, // sem pista para apagar, tira 8% de atenção
@@ -163,11 +200,35 @@
        latePenalty = efeito enquanto estiver atrasada.                                   */
     bills: {
       list: [
-        { id: "internet", base: 130, dueWeek: 1, cutAfter: 3, latePenalty: { viewsPct: -40 } }, // dia 5; sem internet boa, o alcance despenca
+        {
+          id: "internet",
+          base: 130,
+          dueWeek: 1,
+          cutAfter: 3,
+          latePenalty: { viewsPct: -40 },
+        }, // dia 5; sem internet boa, o alcance despenca
         { id: "aluguel", base: 480, dueWeek: 2, cutAfter: 4, latePenalty: {} }, // dia 10; despejo demora mais (processo)
-        { id: "energia", base: 170, dueWeek: 3, cutAfter: 3, latePenalty: { actions: -1 } }, // dia 15; PC desligado metade do tempo
-        { id: "agua", base: 100, dueWeek: 3, cutAfter: 3, latePenalty: { repPerWeek: -2 } }, // dia 20; o público sente o cheiro
-        { id: "compras", base: 300, dueWeek: 4, cutAfter: 2, latePenalty: { actions: -1 } }, // dia 28; fome derruba rápido
+        {
+          id: "energia",
+          base: 170,
+          dueWeek: 3,
+          cutAfter: 3,
+          latePenalty: { actions: -1 },
+        }, // dia 15; PC desligado metade do tempo
+        {
+          id: "agua",
+          base: 100,
+          dueWeek: 3,
+          cutAfter: 3,
+          latePenalty: { repPerWeek: -2 },
+        }, // dia 20; o público sente o cheiro
+        {
+          id: "compras",
+          base: 300,
+          dueWeek: 4,
+          cutAfter: 2,
+          latePenalty: { actions: -1 },
+        }, // dia 28; fome derruba rápido
       ],
       firstRentPaid: true, // o 1º aluguel é pago na assinatura do contrato (realista e dá fôlego)
       lateFee: 0.1, // multa de 10% na primeira semana de atraso
@@ -179,8 +240,8 @@
     property: {
       levels: [
         { cost: 0, perk: {} },
-        { cost: 1500, perk: { profitPct: 5 } },
-        { cost: 3500, perk: { riskPct: 10 } },
+        { cost: 1000, perk: { profitPct: 5 } },
+        { cost: 3000, perk: { riskPct: 10 } },
         { cost: 6500, perk: { followersWeeklyPct: 1 } },
         { cost: 11000, perk: { profitPct: 10 } },
         { cost: 18000, perk: { repPerWeek: 1 } },
@@ -202,22 +263,111 @@
     upgrades: {
       caps: { profitPct: 60, policePct: 60, viewsPct: 80 }, // tetos para nenhum combo quebrar o jogo
       list: [
-        { id: "grupo-vizinhanca", track: "audiencia", cost: [600, 1800, 4500], effect: { viewsPct: [8, 8, 8] } },
-        { id: "curso-redacao", track: "cursos", cost: [700, 3000, 12000], effect: { profitPct: [5, 5, 5] } },
-        { id: "software-edicao", track: "equipamento", cost: [800, 2200, 4500, 9000], effect: { profitPct: [6, 6, 6, 6] } },
-        { id: "curso-fotojornalismo", track: "cursos", cost: [900, 3200, 7000], effect: { viewsPct: [7, 7, 7] } },
-        { id: "curso-checagem", track: "cursos", cost: [1000, 3500], effect: { repPerWeek: [1, 1] } },
-        { id: "rede-informantes", track: "audiencia", cost: [1000, 2800, 6500], effect: { followersPct: [10, 10, 10] } },
-        { id: "chip-pre-pago", track: "seguranca", cost: [900, 2500], effect: { riskFlat: [1, 1] } },
-        { id: "celular", track: "equipamento", cost: [1200, 2400, 3200, 4800, 7200, 9800, 12000, 14500], effect: { profitPct: [3, 3, 3, 3, 3, 3, 3, 3], viewsPct: [0, 0, 0, 0, 0, 4, 4, 4] } },
-        { id: "estagiario", track: "equipe", cost: [1500], effect: { profitPct: [4], followersPct: [5] }, salary: [90], requires: { property: 2 } },
-        { id: "camera", track: "equipamento", cost: [2000, 6000, 9000, 18000, 36000], effect: { viewsPct: [9, 9, 9, 9, 9] }, requires: { property: 2 } },
-        { id: "kit-gravacao", track: "equipamento", cost: [2200, 4200], effect: { profitPct: [6, 6] } },
-        { id: "computador", track: "equipamento", cost: [2500, 4500, 7000, 14000, 22000, 30000], effect: { profitPct: [4, 4, 4, 4, 4, 4] } },
-        { id: "vpn", track: "seguranca", cost: [2500, 6000], effect: { policePct: [8, 8] }, requires: { property: 2 } },
-        { id: "tenis-fuga", track: "seguranca", cost: [1200, 3500], effect: { mazeSpeedPct: [12, 12] } }, // novo: ajuda no labirinto
-        { id: "fragmentadora", track: "seguranca", cost: [1800, 5000], effect: { shredSlowPct: [15, 15] } }, // novo: ajuda na queima de arquivo
-        { id: "editor-plantao", track: "equipe", cost: [14000], effect: { actions: [1] }, salary: [350], requires: { property: 5 } },
+        {
+          id: "grupo-vizinhanca",
+          track: "audiencia",
+          cost: [400, 650, 3000],
+          effect: { viewsPct: [8, 10, 12] },
+        },
+        {
+          id: "curso-redacao",
+          track: "cursos",
+          cost: [150, 300, 600],
+          effect: { profitPct: [5, 5, 5] },
+        },
+        {
+          id: "software-edicao",
+          track: "equipamento",
+          cost: [650, 1250, 2500, 7000],
+          effect: { profitPct: [6, 6, 6, 12] },
+        },
+        {
+          id: "curso-fotojornalismo",
+          track: "cursos",
+          cost: [700, 1300, 3000],
+          effect: { viewsPct: [7, 7, 7] },
+        },
+        {
+          id: "curso-checagem",
+          track: "cursos",
+          cost: [1200, 3500],
+          effect: { repPerWeek: [1, 1] },
+        },
+        {
+          id: "rede-informantes",
+          track: "audiencia",
+          cost: [700, 1800, 4500],
+          effect: { followersPct: [10, 10, 10] },
+        },
+        {
+          id: "chip-pre-pago",
+          track: "seguranca",
+          cost: [600, 1500],
+          effect: { riskFlat: [1, 1] },
+        },
+        {
+          id: "celular",
+          track: "equipamento",
+          cost: [1200, 2400, 3200, 4800, 7200, 9800, 12000, 14500],
+          effect: {
+            profitPct: [3, 3, 3, 3, 3, 3, 3, 3],
+            viewsPct: [0, 0, 0, 0, 0, 4, 4, 4],
+          },
+        },
+        {
+          id: "estagiario",
+          track: "equipe",
+          cost: [1800],
+          effect: { profitPct: [4], followersPct: [5] },
+          salary: [90],
+          requires: { property: 2 },
+        },
+        {
+          id: "camera",
+          track: "equipamento",
+          cost: [2000, 4500, 7500, 14000, 18000],
+          effect: { viewsPct: [9, 9, 9, 9, 10] },
+          requires: { property: 2 },
+        },
+        {
+          id: "kit-gravacao",
+          track: "equipamento",
+          cost: [5200, 10200],
+          effect: { profitPct: [10, 15] },
+        },
+        {
+          id: "computador",
+          track: "equipamento",
+          cost: [2500, 4500, 7000, 14000, 22000, 30000],
+          effect: { profitPct: [4, 5, 6, 7, 8, 9] },
+        },
+        {
+          id: "vpn",
+          track: "seguranca",
+          cost: [2500, 6000],
+          effect: { policePct: [8, 8] },
+          requires: { property: 2 },
+        },
+        {
+          id: "tenis-fuga",
+          track: "seguranca",
+          cost: [500, 2500],
+          effect: { mazeSpeedPct: [12, 12] },
+        }, // novo: ajuda no labirinto
+        {
+          id: "fragmentadora",
+          track: "seguranca",
+          cost: [1800, 5000],
+          effect: { shredSlowPct: [15, 15] },
+        }, // novo: ajuda na queima de arquivo
+        {
+          id: "editor-plantao",
+          track: "equipe",
+          cost: [14000],
+          effect: { actions: [1] },
+          salary: [2000],
+          requires: { property: 5 },
+        },
       ],
     },
 
@@ -234,13 +384,28 @@
         patrocinio: [{ money: 260, rep: -10 }, { rep: 4 }],
         meme: [{ followersPct: 8, followersMin: 40, police: 3 }],
         tv: [{ followersPct: 18, followersMin: 120, police: 8 }],
-        hacker: [{ money: -380, ifBroke: { police: 18 } }, { police: 16 }],
+        hacker: [{ money: -380, ifBroke: { police: 0 } }, { police: 16 }],
         tiaZap: [{ followersPct: 6, followersMin: 30, rep: -2 }],
-        podcast: [{ followersPct: 12, followersMin: 60, police: 5 }, { rep: 2 }],
-        sindico: [{ money: -200, ifBroke: { police: 10 } }, { police: 8, rep: -3 }],
-        reporter: [{ followersPct: 15, followersMin: 80, police: 9 }, { police: -4 }],
-        viatura: [{ police: 10, rep: 4 }, { money: -160, police: -15 }],
-        factCheck: [{ police: 8, rep: -6 }, { deletePost: true, police: -3 }],
+        podcast: [
+          { followersPct: 12, followersMin: 60, police: 5 },
+          { rep: 2 },
+        ],
+        sindico: [
+          { money: -200, ifBroke: { police: 2 } },
+          { police: 8, rep: -3 },
+        ],
+        reporter: [
+          { followersPct: 15, followersMin: 80, police: 9 },
+          { police: -4 },
+        ],
+        viatura: [
+          { police: 10, rep: 4 },
+          { money: -360, police: -15 },
+        ],
+        factCheck: [
+          { police: 8, rep: -6 },
+          { deletePost: true, police: -3 },
+        ],
         ghost: [{ revivePost: true, police: 3 }],
       },
     },
