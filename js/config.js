@@ -14,7 +14,7 @@
       followers: 40, // canal minúsculo, quase só parente e vizinho
       reputation: 15, // item 9: começa com reputação Baixa (escala 0 a 100)
       police: 0, // ninguém te conhece ainda
-      actions: 3, // 3 ações por semana: publicar, ficar na miúda ou queima de arquivo
+      actions: 3, // 2 ações por semana: publicar, ficar na miúda ou queima de arquivo
     },
 
     calendar: {
@@ -88,26 +88,26 @@
     stickers: {
       sensacionalismo: { profit: 1.1, viral: 1.2, risk: 4.5, repCost: 0 }, // Lucro 3 · Risco 3
       "teoria-da-conspiracao": {
-        profit: 0.6,
+        profit: 2,
         viral: 1.3,
         risk: 4.5,
         repCost: 0,
       }, // Lucro 2 · Risco 3
-      "caca-clique": { profit: 1.1, viral: 1.35, risk: 4.5, repCost: 0 }, // Lucro 3 · Risco 3
+      "caca-clique": { profit: 1.2, viral: 1.35, risk: 4.5, repCost: 0 }, // Lucro 3 · Risco 3
       "especialista-anonimo": {
-        profit: 0.9,
+        profit: 1,
         viral: 1.05,
         risk: 1.5,
         repCost: 0,
       }, // Lucro 3 · Risco 1
-      "compartilhe-agora": { profit: 0.4, viral: 2.0, risk: 1, repCost: 1 }, // Lucro 1 · Viral 4
+      "compartilhe-agora": { profit: 0.6, viral: 2.0, risk: 1, repCost: 1 }, // Lucro 1 · Viral 4
       "culpa-dos-alienigenas": {
-        profit: 0.6,
+        profit: 0.8,
         viral: 1.25,
         risk: 1,
         repCost: 3,
       }, // Lucro 2 · Reputação 3 (amarelo)
-      "cura-milagrosa": { profit: 1.4, viral: 1.15, risk: 2.5, repCost: 7 }, // Lucro 3 · Reputação 4 (vermelho)
+      "cura-milagrosa": { profit: 1.6, viral: 1.15, risk: 2.5, repCost: 7 }, // Lucro 3 · Reputação 4 (vermelho)
     },
     maxStickers: 3, // limite por manchete: mais que isso não cabe no jornal
 
@@ -144,14 +144,14 @@
        P(crash ≥ x) = houseEdge / x  → o ponto de queda é sorteado ANTES da decolagem.
        multiplicador(t) = e^(growth × (t − takeoff))                                   */
     crash: {
-      houseEdge: 0.94, // ~7% das matérias caem logo na decolagem (x1,00); P(passar de x2) ≈ 47%
-      maxMult: 25, // teto do hype; o avião "imprime sozinho" se chegar aqui
+      houseEdge: 1.2, // ~7% das matérias caem logo na decolagem (x1,00); P(passar de x2) ≈ 47%
+      maxMult: 44.35, // teto do hype; o avião "imprime sozinho" se chegar aqui
       growth: 0.3, // x2 em ~2,9 s, x5 em ~6 s: dá tempo de pensar, mas não de enrolar
       takeoff: 0.6, // segundos rodando na pista em x1,00
       countdown: 1.2, // segundos de "preparar" antes da decolagem
       crashKeep: 0.35, // matéria desmentida ainda rende 35% (alguém leu antes do desmentido)
       crashRiskExtra: 0.3, // desmentida com adesivo: +30% do risco (o delegado lê a checagem)
-      riskPerLnMult: 0.2, // quanto mais alto voa, mais gente (e polícia) vê: risco × (1 + 0,2·ln x)
+      riskPerLnMult: 0.15, // quanto mais alto voa, mais gente (e polícia) vê: risco × (1 + 0,2·ln x)
       historySize: 10, // quantos resultados anteriores aparecem como fichas
     },
 
@@ -182,13 +182,13 @@
 
     /* ---------------- Queima de Arquivo (item 22) ---------------- */
     shredder: {
-      cooldownWeeks: 3, // uso estratégico: no máximo uma vez a cada 3 semanas
+      cooldownWeeks: 2, // uso estratégico: no máximo uma vez a cada 3 semanas
       duration: 20, // segundos de partida
       lives: 3, // erros permitidos (prova que escapa ou papel inocente triturado)
-      spawnEvery: 0.85, // segundos entre papéis no começo...
+      spawnEvery: 0.6, // segundos entre papéis no começo...
       spawnEveryMin: 0.45, // ...e no fim (acelera)
-      fallSpeed: 0.5, // telas por segundo
-      fallSpeedMax: 0.7,
+      fallSpeed: 0.8, // telas por segundo
+      fallSpeedMax: 1,
       evidenceShare: 0.55, // 55% dos papéis são provas
       winClues: -1, // vitória: delegado perde 1 pista
       winPoliceIfNoClue: 8, // sem pista para apagar, tira 8% de atenção
@@ -202,7 +202,7 @@
       list: [
         {
           id: "internet",
-          base: 130,
+          base: 100,
           dueWeek: 1,
           cutAfter: 3,
           latePenalty: { viewsPct: -40 },
@@ -224,7 +224,7 @@
         }, // dia 20; o público sente o cheiro
         {
           id: "compras",
-          base: 300,
+          base: 280,
           dueWeek: 4,
           cutAfter: 2,
           latePenalty: { actions: -1 },
